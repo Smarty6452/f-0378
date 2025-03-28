@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,10 @@ import {
   Globe, 
   Search, 
   Cloud, 
-  Sparkles 
+  Sparkles,
+  Star,
+  Award,
+  Zap
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -68,6 +70,9 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [matchedPairs, setMatchedPairs] = useState(0);
   const [isCheckingMatch, setIsCheckingMatch] = useState(false);
+  const [showStarGame, setShowStarGame] = useState(false);
+  const [starScore, setStarScore] = useState(0);
+  const [clickedStars, setClickedStars] = useState<number[]>([]);
 
   // Check if all skills are unlocked
   useEffect(() => {
@@ -76,28 +81,66 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
     setUnlockedCount(skills.filter(skill => skill.unlocked).length);
   }, [skills]);
 
-  // Initialize memory game
+  // Initialize memory game (SIMPLER VERSION)
   const initializeMemoryGame = () => {
-    const unlockedSkills = skills.filter(skill => skill.unlocked);
-    // Get 4 random skills (or less if not enough unlocked)
-    const gameSkills = [...unlockedSkills]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, Math.min(4, unlockedSkills.length));
+    // Always use the same 3 pairs for easier gameplay
+    const gameSkillIds = ["react", "js", "html"];
     
     // Create pairs of cards
-    const cardPairs = gameSkills.flatMap(skill => [
-      { id: Math.random(), skillId: skill.id, isFlipped: false, isMatched: false },
-      { id: Math.random(), skillId: skill.id, isFlipped: false, isMatched: false }
+    const cardPairs = gameSkillIds.flatMap(skillId => [
+      { id: Math.random(), skillId, isFlipped: false, isMatched: false },
+      { id: Math.random(), skillId, isFlipped: false, isMatched: false }
     ]);
     
-    // Shuffle the cards
-    setMemoryCards(cardPairs.sort(() => 0.5 - Math.random()));
+    // Shuffle the cards (but not too much for easier gameplay)
+    const shuffledCards = [...cardPairs];
+    // Simple shuffle that keeps pairs somewhat close to each other
+    for (let i = 0; i < shuffledCards.length; i += 2) {
+      const swapIndex = i + (Math.random() > 0.5 ? 2 : 0);
+      if (swapIndex < shuffledCards.length) {
+        [shuffledCards[i], shuffledCards[swapIndex]] = [shuffledCards[swapIndex], shuffledCards[i]];
+      }
+    }
+    
+    setMemoryCards(shuffledCards);
     setFlippedCards([]);
     setMatchedPairs(0);
     setShowMemoryGame(true);
+    setShowStarGame(false); // Hide star game if showing memory game
   };
 
-  // Handle card flip
+  // Initialize star collection game
+  const initializeStarGame = () => {
+    setShowStarGame(true);
+    setShowMemoryGame(false); // Hide memory game if showing star game
+    setStarScore(0);
+    setClickedStars([]);
+  };
+
+  // Handle star click in star game
+  const handleStarClick = (starIndex: number) => {
+    if (clickedStars.includes(starIndex)) return;
+    
+    setClickedStars(prev => [...prev, starIndex]);
+    setStarScore(prev => prev + 1);
+    
+    // When player collects 5 stars, unlock a skill
+    if (starScore + 1 >= 5) {
+      const lockedSkills = skills.filter(skill => !skill.unlocked);
+      if (lockedSkills.length > 0) {
+        const randomIndex = Math.floor(Math.random() * lockedSkills.length);
+        unlockSkill(lockedSkills[randomIndex].id);
+        toast({
+          title: "Star Challenge Completed! ⭐",
+          description: `You've unlocked the ${lockedSkills[randomIndex].name} skill!`,
+          variant: "default",
+        });
+        setShowStarGame(false);
+      }
+    }
+  };
+
+  // Handle card flip - SIMPLIFIED for easier gameplay
   const handleCardFlip = (cardIndex: number) => {
     if (
       isCheckingMatch || 
@@ -137,22 +180,36 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
           
           // Check if all pairs are matched
           if (matchedPairs + 1 === memoryCards.length / 2) {
-            // Game completed - unlock a random locked skill
+            // Game completed - unlock TWO random locked skills (making it more rewarding)
             const lockedSkills = skills.filter(skill => !skill.unlocked);
             if (lockedSkills.length > 0) {
-              const randomIndex = Math.floor(Math.random() * lockedSkills.length);
-              unlockSkill(lockedSkills[randomIndex].id);
-              toast({
-                title: "Memory Game Completed! 🎮",
-                description: `You've unlocked the ${lockedSkills[randomIndex].name} skill!`,
-                variant: "default",
-              });
+              // Unlock first skill
+              const randomIndex1 = Math.floor(Math.random() * lockedSkills.length);
+              unlockSkill(lockedSkills[randomIndex1].id);
+              
+              // If there are more locked skills, unlock a second one
+              const remainingLockedSkills = skills.filter(skill => !skill.unlocked && skill.id !== lockedSkills[randomIndex1].id);
+              if (remainingLockedSkills.length > 0) {
+                const randomIndex2 = Math.floor(Math.random() * remainingLockedSkills.length);
+                unlockSkill(remainingLockedSkills[randomIndex2].id);
+                toast({
+                  title: "Memory Game Completed! 🎮",
+                  description: `Great job! You've unlocked TWO new skills!`,
+                  variant: "default",
+                });
+              } else {
+                toast({
+                  title: "Memory Game Completed! 🎮",
+                  description: `You've unlocked the ${lockedSkills[randomIndex1].name} skill!`,
+                  variant: "default",
+                });
+              }
             }
             setShowMemoryGame(false);
           }
         }, 800);
       } else {
-        // No match
+        // No match - EASIER GAMEPLAY: give players more time to see cards
         setTimeout(() => {
           const updatedCards = [...memoryCards];
           updatedCards[firstCardIndex].isFlipped = false;
@@ -160,7 +217,7 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
           setMemoryCards(updatedCards);
           setFlippedCards([]);
           setIsCheckingMatch(false);
-        }, 1000);
+        }, 1500); // Longer time to see cards
       }
     }
   };
@@ -177,24 +234,21 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
     );
   };
 
-  // Check if a skill can be unlocked (adjacent to an unlocked skill)
-  const canUnlock = (id: string) => {
-    const skill = skills.find(s => s.id === id);
-    if (!skill || skill.unlocked) return false;
-    
-    // Get adjacent skills based on position
-    const adjacentSkills = skills.filter(s => {
-      const xDiff = Math.abs(s.position.x - skill.position.x);
-      const yDiff = Math.abs(s.position.y - skill.position.y);
-      
-      // Consider adjacent if within a certain distance and in the same category
-      return (
-        s.unlocked && 
-        ((xDiff <= 15 && yDiff <= 15) || s.category === skill.category)
-      );
-    });
-    
-    return adjacentSkills.length > 0;
+  // NEW FEATURE: Allow unlocking skills with a one-click action (no adjacency required)
+  // This will make it much easier to complete the skills tree
+  const handleDirectUnlock = () => {
+    // Get all locked skills
+    const lockedSkills = skills.filter(skill => !skill.unlocked);
+    if (lockedSkills.length > 0) {
+      // Unlock a random skill
+      const randomIndex = Math.floor(Math.random() * lockedSkills.length);
+      unlockSkill(lockedSkills[randomIndex].id);
+      toast({
+        title: "New Skill Unlocked! 🌟",
+        description: `You've unlocked the ${lockedSkills[randomIndex].name} skill!`,
+        variant: "default",
+      });
+    }
   };
 
   return (
@@ -205,60 +259,145 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
         transition={{ duration: 0.5 }}
         className="text-center mb-10"
       >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-red-500 via-yellow-500 to-red-500 bg-clip-text text-transparent">
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-glow bg-gradient-to-r from-yellow-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
           Skills Tree
         </h2>
         <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-          Unlock my skills by connecting adjacent nodes in the skill tree or play the memory game to unlock skills faster!
+          Collect skills by playing mini-games! Unlock all skills to complete this section.
         </p>
         <div className="mt-4 font-mono text-yellow-500">
           Skills Unlocked: {unlockedCount} / {skills.length}
         </div>
         
-        {unlockedCount > 1 && !showMemoryGame && (
+        {/* Game selection buttons */}
+        {!showMemoryGame && !showStarGame && (
           <motion.div 
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="mt-2"
+            className="mt-4 flex flex-wrap justify-center gap-3"
           >
             <Button 
               onClick={initializeMemoryGame}
               variant="outline" 
               className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
             >
-              Play Memory Game to Unlock Skills Faster 🎮
+              <Cpu className="w-4 h-4 mr-2" /> Play Memory Match Game
+            </Button>
+            
+            <Button 
+              onClick={initializeStarGame}
+              variant="outline" 
+              className="border-red-500 text-red-500 hover:bg-red-500/10"
+            >
+              <Star className="w-4 h-4 mr-2" /> Play Star Collection Game
+            </Button>
+            
+            <Button 
+              onClick={handleDirectUnlock}
+              variant="outline" 
+              className="border-green-500 text-green-500 hover:bg-green-500/10"
+            >
+              <Zap className="w-4 h-4 mr-2" /> Instant Skill Unlock
             </Button>
           </motion.div>
         )}
       </motion.div>
 
-      {/* Memory Game */}
+      {/* Star Collection Game */}
+      <AnimatePresence>
+        {showStarGame && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="w-full max-w-3xl mx-auto mb-8 py-6 px-4 bg-gradient-to-br from-black/80 to-red-900/20 rounded-lg border border-yellow-500/30"
+          >
+            <h3 className="text-xl font-bold text-center text-yellow-400 mb-4">
+              <Star className="inline-block mr-2 text-yellow-400" /> Collect 5 Stars to Unlock a Skill!
+            </h3>
+            <div className="text-center mb-4">Stars Collected: {starScore}/5</div>
+            
+            <div className="relative h-64 w-full overflow-hidden rounded-lg bg-black/50 border border-red-500/20">
+              {Array.from({ length: 15 }).map((_, index) => {
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * 1 + 1;
+                const delay = Math.random() * 3;
+                
+                return (
+                  <motion.div
+                    key={index}
+                    className={`absolute cursor-pointer ${clickedStars.includes(index) ? 'opacity-0' : 'opacity-100'}`}
+                    style={{ left: `${x}%`, top: `${y}%` }}
+                    onClick={() => handleStarClick(index)}
+                    whileHover={{ scale: 1.5, rotate: 180 }}
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      filter: [
+                        'drop-shadow(0 0 5px rgba(255,204,0,0.5))',
+                        'drop-shadow(0 0 10px rgba(255,204,0,0.8))',
+                        'drop-shadow(0 0 5px rgba(255,204,0,0.5))'
+                      ]
+                    }}
+                    transition={{
+                      duration: 2 + delay,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    <Star 
+                      className="text-yellow-400" 
+                      size={20 + size * 10} 
+                      fill="rgba(255, 204, 0, 0.8)"
+                    />
+                  </motion.div>
+                );
+              })}
+            </div>
+            
+            <div className="mt-4 text-center">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowStarGame(false)}
+                className="border-red-500 text-red-500 hover:bg-red-500/10"
+              >
+                Return to Skills Tree
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Memory Game - SIMPLIFIED AND IMPROVED */}
       <AnimatePresence>
         {showMemoryGame && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="w-full max-w-md mx-auto mb-8 py-4 px-2 bg-black/60 rounded-lg border border-yellow-500/50"
+            className="w-full max-w-md mx-auto mb-8 py-6 px-4 bg-gradient-to-br from-black/80 to-red-900/20 rounded-lg border border-yellow-500/30"
           >
             <h3 className="text-xl font-bold text-center text-yellow-400 mb-4">
-              Match Skill Cards
+              <Award className="inline-block mr-2" /> Match Skill Cards
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-2">
+            <div className="text-center mb-4 text-yellow-200">
+              Pairs Matched: {matchedPairs}/{memoryCards.length/2}
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-2">
               {memoryCards.map((card, index) => (
                 <motion.div
                   key={card.id}
-                  className={`relative h-20 cursor-pointer rounded-md ${
+                  className={`relative h-24 cursor-pointer rounded-md ${
                     card.isFlipped || card.isMatched 
                       ? 'pointer-events-none' 
-                      : 'hover:shadow-md hover:shadow-yellow-500/20'
+                      : 'hover:shadow-md hover:shadow-yellow-500/40'
                   }`}
                   onClick={() => handleCardFlip(index)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <motion.div
-                    className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-md flex items-center justify-center text-white"
+                    className="absolute inset-0 w-full h-full bg-gradient-to-br from-red-900/80 to-black border-2 border-red-500/30 rounded-md flex items-center justify-center text-white"
                     initial={false}
                     animate={{
                       rotateY: card.isFlipped || card.isMatched ? 180 : 0,
@@ -266,13 +405,13 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
                     }}
                     transition={{ duration: 0.5 }}
                   >
-                    <span className="text-xl">?</span>
+                    <span className="text-2xl font-bold gradient-text">?</span>
                   </motion.div>
                   <motion.div
-                    className={`absolute inset-0 w-full h-full rounded-md flex items-center justify-center 
+                    className={`absolute inset-0 w-full h-full rounded-md flex flex-col items-center justify-center p-2 
                       ${card.isMatched 
-                        ? 'bg-gradient-to-br from-green-800 to-green-900 border border-green-500/50' 
-                        : 'bg-gradient-to-br from-red-800 to-red-900 border border-red-500/50'
+                        ? 'bg-gradient-to-br from-green-800/90 to-green-900/70 border-2 border-green-500/50' 
+                        : 'bg-gradient-to-br from-yellow-800/90 to-red-900/70 border-2 border-yellow-500/50'
                       }`}
                     initial={{ rotateY: -180, opacity: 0 }}
                     animate={{
@@ -281,15 +420,17 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
                     }}
                     transition={{ duration: 0.5 }}
                   >
-                    {skills.find(skill => skill.id === card.skillId)?.icon}
-                    <span className="text-xs absolute bottom-1">
+                    <div className="text-3xl mb-1">
+                      {skills.find(skill => skill.id === card.skillId)?.icon}
+                    </div>
+                    <span className="text-xs font-medium text-center">
                       {skills.find(skill => skill.id === card.skillId)?.name}
                     </span>
                   </motion.div>
                 </motion.div>
               ))}
             </div>
-            <div className="mt-4 text-center">
+            <div className="mt-6 text-center">
               <Button 
                 variant="outline" 
                 onClick={() => setShowMemoryGame(false)}
@@ -302,8 +443,8 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
         )}
       </AnimatePresence>
 
-      {/* Skills Tree Visualization */}
-      {!showMemoryGame && (
+      {/* Skills Tree Visualization - Only show when not playing games */}
+      {!showMemoryGame && !showStarGame && (
         <div className="relative w-full h-[60vh] bg-gradient-to-b from-[#151822] to-[#1D1F2C] rounded-xl border border-red-500/20 overflow-hidden">
           {/* Background grid lines */}
           <div className="absolute inset-0" style={{
@@ -311,14 +452,14 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
             backgroundSize: "20px 20px"
           }} />
           
-          {/* Connection lines between skills */}
+          {/* Connection lines between skills - simplified connections */}
           <svg className="absolute inset-0 w-full h-full">
             {skills.filter(skill => skill.unlocked).map(skill => {
               // Draw lines to adjacent unlocked skills
               return skills.filter(s => 
                 s.unlocked && 
                 s.id !== skill.id && 
-                (s.category === skill.category || Math.abs(s.position.x - skill.position.x) <= 15)
+                (s.category === skill.category)
               ).map(targetSkill => (
                 <motion.line
                   key={`${skill.id}-${targetSkill.id}`}
@@ -355,21 +496,18 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
               className={`absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300
                 ${skill.unlocked 
                 ? 'scale-100 opacity-100' 
-                : canUnlock(skill.id)
-                  ? 'scale-90 opacity-70 hover:scale-95 hover:opacity-90'
-                  : 'scale-75 opacity-40'}
+                : 'scale-90 opacity-70 hover:scale-95 hover:opacity-90'}
               `}
               style={{
                 left: `${skill.position.x}%`,
                 top: `${skill.position.y}%`,
               }}
-              onClick={() => canUnlock(skill.id) && unlockSkill(skill.id)}
-              whileHover={{ scale: skill.unlocked || canUnlock(skill.id) ? 1.1 : 0.8 }}
+              whileHover={{ scale: skill.unlocked ? 1.1 : 0.9 }}
               whileTap={{ scale: 0.95 }}
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ 
-                scale: skill.unlocked ? 1 : canUnlock(skill.id) ? 0.9 : 0.75,
-                opacity: skill.unlocked ? 1 : canUnlock(skill.id) ? 0.7 : 0.4 
+                scale: skill.unlocked ? 1 : 0.85,
+                opacity: skill.unlocked ? 1 : 0.6 
               }}
               transition={{ 
                 duration: 0.5, 
@@ -382,9 +520,7 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
                 className={`flex flex-col items-center justify-center p-2 rounded-lg w-28 h-28
                   ${skill.unlocked 
                     ? 'bg-black/70 backdrop-blur-sm border-2 shadow-lg' 
-                    : canUnlock(skill.id)
-                      ? 'bg-black/50 backdrop-blur-sm border border-red-500/50'
-                      : 'bg-black/30 border border-gray-700'}
+                    : 'bg-black/50 backdrop-blur-sm border border-red-500/50'}
                   ${skill.category === 'frontend' && skill.unlocked ? 'border-red-500 shadow-red-500/30' : ''}
                   ${skill.category === 'backend' && skill.unlocked ? 'border-yellow-500 shadow-yellow-500/30' : ''}
                   ${skill.category === 'design' && skill.unlocked ? 'border-cyan-500 shadow-cyan-500/30' : ''}
@@ -427,10 +563,8 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
                 <div className="text-xs mt-1">
                   {skill.unlocked ? (
                     <span className="font-mono">{skill.level}%</span>
-                  ) : canUnlock(skill.id) ? (
-                    <span className="animate-pulse text-yellow-400">Click to unlock</span>
                   ) : (
-                    <span>Locked</span>
+                    <span className="text-yellow-400">Play games to unlock!</span>
                   )}
                 </div>
               </div>
