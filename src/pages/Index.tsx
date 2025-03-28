@@ -29,7 +29,7 @@ const Index = () => {
     }, 1000);
     
     // Generate background stars
-    const newStars = Array.from({ length: 30 }, (_, i) => ({
+    const newStars = Array.from({ length: 50 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -86,7 +86,7 @@ const Index = () => {
 
   if (!loaded) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black animated-bg">
+      <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-[#1A1F2C] to-black animated-bg">
         <div className="text-yellow-400 flex flex-col items-center">
           <motion.div
             animate={{

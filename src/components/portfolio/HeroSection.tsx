@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Rocket, Star, ArrowRight, Sparkles, Globe, Code } from "lucide-react";
+import { Rocket, Star, ArrowRight, Sparkles, Globe, Code, Github, Linkedin, Mail, Phone } from "lucide-react";
 
 interface HeroSectionProps {
   onContinue: () => void;
@@ -13,6 +13,7 @@ const HeroSection = ({ onContinue, onEasterEgg }: HeroSectionProps) => {
   const [clickCount, setClickCount] = useState(0);
   const [stars, setStars] = useState<{ id: number; x: number; y: number; size: number; delay: number }[]>([]);
   const [meteors, setMeteors] = useState<{ id: number; x: number; y: number; duration: number; delay: number }[]>([]);
+  const [hovered, setHovered] = useState(false);
 
   // Easter egg trigger
   useEffect(() => {
@@ -43,6 +44,13 @@ const HeroSection = ({ onContinue, onEasterEgg }: HeroSectionProps) => {
     }));
     setMeteors(newMeteors);
   }, []);
+
+  const socialLinks = [
+    { icon: <Github className="h-5 w-5" />, url: "https://github.com/thecodingrohit", color: "text-white" },
+    { icon: <Linkedin className="h-5 w-5" />, url: "https://www.linkedin.com/in/rohit-bharti-", color: "text-blue-400" },
+    { icon: <Mail className="h-5 w-5" />, url: "mailto:rohitbharti326452@gmail.com", color: "text-red-400" },
+    { icon: <Phone className="h-5 w-5" />, url: "tel:+17429990414", color: "text-green-400" },
+  ];
 
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center relative overflow-hidden animated-bg">
@@ -104,131 +112,227 @@ const HeroSection = ({ onContinue, onEasterEgg }: HeroSectionProps) => {
         </motion.div>
       ))}
 
-      {/* Hero content */}
+      {/* Main content container with subtle animation */}
       <motion.div
-        className="text-center z-10 bg-black/40 p-8 rounded-lg backdrop-blur-md border border-red-500/30"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ 
-          duration: 0.8, 
-          delay: 0.2,
-          type: "spring",
-          stiffness: 100,
-          damping: 10
-        }}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="z-10 w-full max-w-6xl mx-auto px-4 md:px-0"
       >
-        <motion.div
-          className="mb-2 inline-block relative"
-          onClick={() => setClickCount(clickCount + 1)}
-          whileHover={{ rotate: 5, scale: 1.05 }}
-          whileTap={{ rotate: 10, scale: 0.95 }}
-        >
-          {/* Glow effect around image */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+          {/* Left side - Profile info */}
           <motion.div 
-            className="absolute inset-0 rounded-full blur-md" 
-            animate={{ 
-              boxShadow: ['0 0 15px rgba(234,56,76,0.5)', '0 0 25px rgba(255,204,0,0.5)', '0 0 15px rgba(234,56,76,0.5)'] 
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
-          
-          <img 
-            src="/lovable-uploads/49a17589-9665-46c7-9c6f-4b0c0e8b75ac.png" 
-            alt="Rohit Bharti" 
-            className="w-32 h-32 rounded-full border-4 border-red-500 mx-auto mb-4 cursor-pointer hover:border-yellow-400 transition-colors duration-300 relative z-10"
-          />
-          
-          {/* Sparkle effects */}
-          <motion.div 
-            className="absolute -top-1 -right-1 text-yellow-400"
-            animate={{ rotate: 360, scale: [1, 1.2, 1] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            className="text-center md:text-left md:w-1/2"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <Sparkles size={20} />
+            <motion.h1 
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 gradient-text"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              The Journey of <br className="hidden md:block" />Rohit Bharti
+            </motion.h1>
+            
+            <motion.p
+              className="text-xl text-gray-200 mb-6 max-w-xl"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <span className="text-yellow-400">Welcome to my digital adventure!</span> I'm a passionate web developer specializing in <span className="text-red-400">React.js</span>, <span className="text-yellow-400">Redux</span>, <span className="text-blue-400">JavaScript</span>, <span className="text-green-400">Node.js</span>, and more.
+            </motion.p>
+            
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+              className="flex flex-wrap justify-center md:justify-start gap-4 mb-8"
+            >
+              <Button 
+                size="lg" 
+                onClick={onContinue}
+                className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white group shadow-lg shadow-red-500/30 glow-button relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center">
+                  Start Adventure <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <span className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 glow-button relative overflow-hidden group"
+                onClick={() => window.open("https://github.com/thecodingrohit", "_blank")}
+              >
+                <span className="relative z-10 flex items-center">
+                  <Github className="mr-2 h-4 w-4 group-hover:rotate-12 transition-transform" /> View Github
+                </span>
+              </Button>
+            </motion.div>
+            
+            {/* Social links */}
+            <motion.div 
+              className="flex justify-center md:justify-start gap-5 mt-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.5 }}
+            >
+              {socialLinks.map((link, i) => (
+                <motion.a
+                  key={i}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${link.color} hover:text-yellow-400 transition-all duration-300 flex items-center justify-center w-10 h-10 rounded-full bg-black/30 border border-white/10 hover:border-yellow-500/50 hover:scale-110`}
+                  whileHover={{ y: -3, rotate: [0, -5, 5, 0] }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {link.icon}
+                </motion.a>
+              ))}
+            </motion.div>
           </motion.div>
           
+          {/* Right side - Profile image with animations */}
           <motion.div 
-            className="absolute -bottom-1 -left-1 text-red-400"
-            animate={{ rotate: -360, scale: [1, 1.2, 1] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            className="md:w-1/2 flex justify-center"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Sparkles size={20} />
-          </motion.div>
-        </motion.div>
-        
-        <motion.h1 
-          className="text-4xl md:text-6xl font-bold mb-4 gradient-text"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          The Journey of Rohit Bharti
-        </motion.h1>
-        
-        <motion.p
-          className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-        >
-          <span className="text-yellow-400">Welcome to my digital adventure!</span> I'm a passionate web developer specializing in <span className="text-red-400">React.js</span>, <span className="text-yellow-400">Redux</span>, <span className="text-blue-400">JavaScript</span>, <span className="text-green-400">Node.js</span>, and more. Explore my journey through an interactive experience.
-        </motion.p>
-        
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.1 }}
-          className="flex flex-wrap justify-center gap-4"
-        >
-          <Button 
-            size="lg" 
-            onClick={onContinue}
-            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white group shadow-lg shadow-red-500/30 glow-button"
-          >
-            Start Adventure <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-          </Button>
-          
-          <Button 
-            variant="outline" 
-            size="lg"
-            className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 glow-button"
-            onClick={() => window.open("https://github.com/thecodingrohit", "_blank")}
-          >
-            <Globe className="mr-2 h-4 w-4" /> View Github
-          </Button>
-        </motion.div>
-        
-        {/* Tech icons floating */}
-        <div className="mt-8 flex justify-center gap-6">
-          <motion.div 
-            className="text-red-500 float-animation"
-            animate={{ y: [-5, 5, -5] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Code size={30} />
-          </motion.div>
-          
-          <motion.div 
-            className="text-yellow-500 float-animation"
-            animate={{ y: [5, -5, 5] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-          >
-            <Code size={30} />
-          </motion.div>
-          
-          <motion.div 
-            className="text-blue-500 float-animation"
-            animate={{ y: [-5, 5, -5] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          >
-            <Code size={30} />
+            <motion.div
+              className="relative"
+              onHoverStart={() => setHovered(true)}
+              onHoverEnd={() => setHovered(false)}
+              onClick={() => setClickCount(clickCount + 1)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {/* Animated background circles */}
+              <motion.div 
+                className="absolute -inset-4 rounded-full bg-gradient-to-r from-red-500/20 to-yellow-500/20 blur-xl"
+                animate={{ 
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, 0],
+                }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              />
+              
+              <motion.div 
+                className="absolute -inset-8 rounded-full bg-gradient-to-r from-yellow-500/10 to-red-500/10 blur-lg"
+                animate={{ 
+                  scale: [1.1, 1, 1.1],
+                  rotate: [0, -5, 0],
+                }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              />
+              
+              {/* Glow effect around image */}
+              <motion.div 
+                className="absolute inset-0 rounded-full blur-md" 
+                animate={{ 
+                  boxShadow: hovered ? 
+                    ['0 0 25px rgba(234,56,76,0.7)', '0 0 35px rgba(255,204,0,0.7)', '0 0 25px rgba(234,56,76,0.7)'] :
+                    ['0 0 15px rgba(234,56,76,0.5)', '0 0 25px rgba(255,204,0,0.5)', '0 0 15px rgba(234,56,76,0.5)']
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              />
+              
+              {/* Profile image */}
+              <div className="relative z-10">
+                <img 
+                  src="/lovable-uploads/49a17589-9665-46c7-9c6f-4b0c0e8b75ac.png" 
+                  alt="Rohit Bharti" 
+                  className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full border-4 border-red-500 mx-auto cursor-pointer hover:border-yellow-400 transition-colors duration-300 relative z-10 object-cover"
+                />
+                
+                {/* Animated tech icons floating around */}
+                <div className="absolute inset-0 -z-10">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute"
+                      style={{ 
+                        left: `${Math.sin(i/5 * Math.PI * 2) * 120 + 50}%`, 
+                        top: `${Math.cos(i/5 * Math.PI * 2) * 120 + 50}%`,
+                      }}
+                      animate={{
+                        x: [0, 10, 0, -10, 0],
+                        y: [0, -10, 0, 10, 0],
+                        rotate: [0, 10, 0, -10, 0],
+                      }}
+                      transition={{
+                        duration: 5 + i,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: i * 0.2,
+                      }}
+                    >
+                      {/* Tech icons */}
+                      <div className={`w-10 h-10 flex items-center justify-center rounded-full 
+                        ${i % 3 === 0 ? 'bg-red-500/80' : i % 3 === 1 ? 'bg-yellow-500/80' : 'bg-blue-500/80'}`}
+                      >
+                        <Code size={20} className="text-white" />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                {/* Sparkle effects */}
+                <motion.div 
+                  className="absolute -top-1 -right-1 text-yellow-400"
+                  animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                >
+                  <Sparkles size={20} />
+                </motion.div>
+                
+                <motion.div 
+                  className="absolute -bottom-1 -left-1 text-red-400"
+                  animate={{ rotate: -360, scale: [1, 1.2, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                >
+                  <Sparkles size={20} />
+                </motion.div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
+        
+        {/* Tech tags marquee effect */}
+        <motion.div
+          className="mt-16 md:mt-10 overflow-hidden w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1.4 }}
+        >
+          <motion.div
+            className="flex gap-4 whitespace-nowrap"
+            animate={{ x: [0, -1000] }}
+            transition={{ 
+              repeat: Infinity, 
+              duration: 20,
+              ease: "linear",
+            }}
+          >
+            {['React.js', 'Redux', 'JavaScript', 'Node.js', 'Express', 'MongoDB', 'HTML', 'CSS', 'Tailwind CSS', 'REST APIs', 'Git', 'UI/UX', 'Problem Solving', 'Team Player', 'Enthusiastic Learner']
+              .map((tech, i) => (
+                <div key={i} className="bg-gradient-to-r from-red-900/30 to-black/30 backdrop-blur-sm px-4 py-2 rounded-full border border-red-500/10 text-red-200 shadow-lg inline-block">
+                  {tech}
+                </div>
+              ))
+            }
+          </motion.div>
+        </motion.div>
       </motion.div>
       
       {/* Rocket animation */}
       <motion.div
-        className="absolute bottom-10 right-10 text-yellow-500"
+        className="absolute bottom-10 right-10 text-yellow-500 z-10"
         animate={{
           y: [0, -15, 0],
           rotate: [0, 5, 0],

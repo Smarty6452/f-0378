@@ -322,3 +322,102 @@
     opacity: 0;
   }
 }
+
+/* Shimmering effect for buttons and highlights */
+.shimmer {
+  background: linear-gradient(
+    to right,
+    rgba(255, 204, 0, 0) 0%,
+    rgba(255, 204, 0, 0.5) 50%,
+    rgba(255, 204, 0, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmerEffect 2s infinite;
+}
+
+@keyframes shimmerEffect {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* New glass effect */
+.glass-panel {
+  background: rgba(26, 31, 44, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(234, 56, 76, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Highlight text animation */
+.highlight-text {
+  position: relative;
+  display: inline-block;
+}
+
+.highlight-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background-color: rgba(234, 56, 76, 0.3);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.5s ease;
+}
+
+.highlight-text:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Rainbow border effect */
+.rainbow-border {
+  position: relative;
+}
+
+.rainbow-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: linear-gradient(45deg, #ea384c, #ffcc00, #ea384c);
+  background-size: 200% 200%;
+  animation: gradientBorder 3s linear infinite;
+  border-radius: inherit;
+}
+
+@keyframes gradientBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Neon text effect */
+.neon-text {
+  color: #fff;
+  text-shadow:
+    0 0 5px #ea384c,
+    0 0 10px #ea384c,
+    0 0 20px #ea384c,
+    0 0 40px #ea384c;
+}
+
+/* Zoom animation on hover */
+.zoom-on-hover {
+  transition: transform 0.3s ease;
+}
+
+.zoom-on-hover:hover {
+  transform: scale(1.05);
+}

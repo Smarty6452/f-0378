@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Github, ExternalLink, Code } from "lucide-react";
+import { ArrowRight, Github, ExternalLink, Code, Bookmark, Flame, Award, BookOpen } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface ProjectsShowcaseProps {
@@ -19,40 +18,59 @@ interface Project {
   demoLink?: string;
   codeLink?: string;
   techStack: string[];
+  featured?: boolean;
 }
 
 const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
   const [projects] = useState<Project[]>([
     {
       id: "project-1",
-      title: "Driving Test App",
-      description: "A driving app with secure login (bcrypt), role-based access, and a clean UI with Toastify.js notifications.",
+      title: "G-Test Login (Driving Test App)",
+      description: "A full-stack application using Node.js and MongoDB to manage driver data and bookings. Features secure login with bcrypt, role-based access control, and Toastify.js notifications.",
       image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1740&auto=format&fit=crop",
       demoLink: "https://g-test-login.vercel.app/",
       codeLink: "https://github.com/thecodingrohit/G-test-login",
-      techStack: ["React", "Node.js", "Express", "MongoDB", "Toastify.js"]
+      techStack: ["Node.js", "Express", "MongoDB", "React", "bcrypt", "JWT", "Toastify.js"],
+      featured: true
     },
     {
       id: "project-2",
-      title: "Fall Detection System",
-      description: "ML-based human fall detection system differentiating between activities and fall scenarios in real-time.",
+      title: "ML Fall Detection System",
+      description: "A machine learning-based human fall detection system differentiating between various activities and fall scenarios in real-time. Published research project.",
       image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=600",
-      techStack: ["Python", "Machine Learning", "Data Analysis", "Algorithms"]
+      techStack: ["Python", "Machine Learning", "Data Analysis", "Classification Algorithms"],
+      featured: true
     },
     {
       id: "project-3",
-      title: "Personal Portfolio",
-      description: "A responsive portfolio website showcasing projects and skills using modern web technologies.",
+      title: "Personal Portfolio (React)",
+      description: "A responsive portfolio website built with React.js and Tailwind CSS, showcasing my projects and skills with smooth animations and modern design.",
       image: "https://images.unsplash.com/photo-1481487196290-c152efe083f5?w=600",
-      techStack: ["React", "Tailwind CSS", "Framer Motion", "Responsive Design"]
+      demoLink: "https://rohit-bharti-portfolio-react.netlify.app/",
+      codeLink: "https://github.com/thecodingrohit/portfolio",
+      techStack: ["React", "Tailwind CSS", "Responsive Design", "Netlify"],
     },
     {
       id: "project-4",
       title: "AuthZ - MERN Authentication",
-      description: "A secure authentication system using Node.js, Express, React, and JWT encryption with role-based access control.",
+      description: "A secure authentication system using Node.js, Express, React, and JWT encryption with role-based access control for improved security.",
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600",
       codeLink: "https://github.com/thecodingrohit/authZ",
-      techStack: ["MERN Stack", "JWT", "Authentication", "Security"]
+      techStack: ["MERN Stack", "JWT", "Authentication", "Security", "Role-based Access"],
+    },
+    {
+      id: "project-5",
+      title: "SkyCar Rental Project",
+      description: "Built dynamic web pages for a car rental application using Ant Design, HTML, and JavaScript. Integrated with payment gateways and backend APIs.",
+      image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600",
+      techStack: ["React", "Ant Design", "Payment Integration", "Responsive UI"],
+    },
+    {
+      id: "project-6",
+      title: "Hotel Chain LMS",
+      description: "Learning Management System developed for a hotel chain to improve training efficiency. Built with React.js and Tailwind CSS with API integrations.",
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+      techStack: ["React.js", "Tailwind CSS", "LMS", "API Integration"],
     }
   ]);
 
@@ -68,7 +86,7 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
     setSelectedProject(null);
   };
 
-  const allProjectsViewed = viewedProjects.size === projects.length;
+  const allProjectsViewed = viewedProjects.size >= 3;
 
   return (
     <div className="min-h-[80vh] py-8">
@@ -78,73 +96,159 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
         transition={{ duration: 0.5 }}
         className="text-center mb-10"
       >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-red-500">Project Showcase</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 gradient-text">Project Showcase</h2>
         <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-          Explore my key projects. Click on each card to learn more!
+          Explore my key projects. <span className="text-yellow-400">Click on each card</span> to learn more!
         </p>
       </motion.div>
 
-      {/* Projects grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            whileHover={{ y: -5 }}
-            className="h-full"
-          >
-            <Card 
-              className="h-full bg-black/40 border-red-500/30 overflow-hidden cursor-pointer transition-all duration-300 hover:border-yellow-500/50 hover:shadow-lg hover:shadow-red-500/10"
-              onClick={() => handleViewProject(project)}
+      {/* Featured projects section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mb-10"
+      >
+        <h3 className="text-xl font-bold mb-4 flex items-center text-yellow-400">
+          <Flame className="mr-2 h-5 w-5" /> Featured Projects
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.filter(p => p.featured).map((project, index) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="h-full"
             >
-              <div className="relative overflow-hidden">
-                <AspectRatio ratio={16 / 9}>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10" />
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
-                  />
-                </AspectRatio>
-                <div className="absolute bottom-2 right-2 z-20">
-                  {viewedProjects.has(project.id) ? (
-                    <Badge className="bg-yellow-500">Viewed</Badge>
-                  ) : (
-                    <Badge className="bg-red-500 animate-pulse">New</Badge>
-                  )}
-                </div>
-              </div>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-xl">{project.title}</CardTitle>
-                <CardDescription className="line-clamp-2">
-                  {project.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="flex flex-wrap gap-2">
-                  {project.techStack.slice(0, 3).map(tech => (
-                    <Badge key={tech} variant="secondary" className="bg-red-900/30 text-red-200">
-                      {tech}
+              <Card 
+                className="h-full bg-gradient-to-br from-black/80 to-red-950/30 border-red-500/30 overflow-hidden cursor-pointer transition-all duration-300 hover:border-yellow-500/50 hover:shadow-lg hover:shadow-red-500/20"
+                onClick={() => handleViewProject(project)}
+              >
+                <div className="relative overflow-hidden">
+                  <AspectRatio ratio={16 / 9}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10" />
+                    <img 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                    />
+                  </AspectRatio>
+                  <div className="absolute top-2 right-2 z-20">
+                    <Badge className="bg-yellow-500/90 text-black font-semibold animate-pulse">
+                      <Flame className="mr-1 h-3 w-3" /> Featured
                     </Badge>
-                  ))}
-                  {project.techStack.length > 3 && (
-                    <Badge variant="secondary" className="bg-gray-800/60">
-                      +{project.techStack.length - 3} more
-                    </Badge>
-                  )}
+                  </div>
+                  <div className="absolute bottom-2 right-2 z-20">
+                    {viewedProjects.has(project.id) ? (
+                      <Badge className="bg-green-500/80">Viewed</Badge>
+                    ) : (
+                      <Badge className="bg-red-500 animate-pulse">New</Badge>
+                    )}
+                  </div>
                 </div>
-              </CardContent>
-              <CardFooter className="pt-0 justify-end">
-                <Button variant="link" className="text-yellow-400 p-0">
-                  View Details <ArrowRight className="ml-1 w-4 h-4" />
-                </Button>
-              </CardFooter>
-            </Card>
-          </motion.div>
-        ))}
-      </div>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl text-white">{project.title}</CardTitle>
+                  <CardDescription className="line-clamp-2 text-gray-300">
+                    {project.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="flex flex-wrap gap-2">
+                    {project.techStack.slice(0, 3).map(tech => (
+                      <Badge key={tech} variant="secondary" className="bg-red-900/40 text-red-200 border border-red-500/20">
+                        {tech}
+                      </Badge>
+                    ))}
+                    {project.techStack.length > 3 && (
+                      <Badge variant="secondary" className="bg-gray-800/60">
+                        +{project.techStack.length - 3} more
+                      </Badge>
+                    )}
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-0 justify-end">
+                  <Button variant="link" className="text-yellow-400 p-0 hover:text-yellow-300 group">
+                    View Details <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Other projects section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <h3 className="text-xl font-bold mb-4 flex items-center text-white">
+          <BookOpen className="mr-2 h-5 w-5" /> More Projects
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {projects.filter(p => !p.featured).map((project, index) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
+              whileHover={{ y: -5 }}
+              className="h-full"
+            >
+              <Card 
+                className="h-full bg-black/40 border-red-500/20 overflow-hidden cursor-pointer transition-all duration-300 hover:border-yellow-500/40 hover:shadow-md hover:shadow-red-500/10"
+                onClick={() => handleViewProject(project)}
+              >
+                <div className="relative overflow-hidden">
+                  <AspectRatio ratio={16 / 9}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10" />
+                    <img 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                    />
+                  </AspectRatio>
+                  <div className="absolute bottom-2 right-2 z-20">
+                    {viewedProjects.has(project.id) ? (
+                      <Badge className="bg-green-500/80">Viewed</Badge>
+                    ) : (
+                      <Badge className="bg-red-500 animate-pulse">New</Badge>
+                    )}
+                  </div>
+                </div>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">{project.title}</CardTitle>
+                  <CardDescription className="line-clamp-2">
+                    {project.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="flex flex-wrap gap-2">
+                    {project.techStack.slice(0, 2).map(tech => (
+                      <Badge key={tech} variant="secondary" className="bg-red-900/30 text-red-200">
+                        {tech}
+                      </Badge>
+                    ))}
+                    {project.techStack.length > 2 && (
+                      <Badge variant="secondary" className="bg-gray-800/60">
+                        +{project.techStack.length - 2} more
+                      </Badge>
+                    )}
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-0 justify-end">
+                  <Button variant="link" className="text-yellow-400 p-0">
+                    View Details <ArrowRight className="ml-1 w-4 h-4" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
 
       {/* Project detail modal */}
       <AnimatePresence>
@@ -160,7 +264,7 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#1A1F2C] border border-red-500/30 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-gradient-to-br from-[#1A1F2C] to-[#262838] border border-red-500/30 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
               onClick={e => e.stopPropagation()}
             >
               <div className="relative">
@@ -183,14 +287,24 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
               </div>
               
               <div className="p-6">
-                <h3 className="text-2xl font-bold text-white mb-2">{selectedProject.title}</h3>
+                <div className="flex items-center mb-2">
+                  {selectedProject.featured && (
+                    <Badge className="bg-yellow-500/90 text-black font-semibold mr-2">
+                      <Flame className="mr-1 h-3 w-3" /> Featured
+                    </Badge>
+                  )}
+                  <h3 className="text-2xl font-bold text-white">{selectedProject.title}</h3>
+                </div>
+                
                 <p className="text-gray-300 mb-6">{selectedProject.description}</p>
                 
                 <div className="mb-6">
-                  <h4 className="text-lg font-semibold text-yellow-400 mb-2">Technologies Used</h4>
+                  <h4 className="text-lg font-semibold text-yellow-400 mb-2 flex items-center">
+                    <Code className="mr-2 h-4 w-4" /> Technologies Used
+                  </h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedProject.techStack.map(tech => (
-                      <Badge key={tech} className="bg-red-900/30 text-red-200">
+                      <Badge key={tech} className="bg-gradient-to-br from-red-900/40 to-red-800/30 text-red-200 border border-red-500/20">
                         {tech}
                       </Badge>
                     ))}
@@ -201,7 +315,7 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
                   {selectedProject.demoLink && (
                     <Button
                       variant="default"
-                      className="bg-red-600 hover:bg-red-700"
+                      className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white group shadow-lg shadow-red-500/20"
                       onClick={() => window.open(selectedProject.demoLink, "_blank")}
                     >
                       <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
@@ -211,10 +325,10 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
                   {selectedProject.codeLink && (
                     <Button
                       variant="outline"
-                      className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
+                      className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 group"
                       onClick={() => window.open(selectedProject.codeLink, "_blank")}
                     >
-                      <Github className="mr-2 h-4 w-4" /> View Code
+                      <Github className="mr-2 h-4 w-4 group-hover:rotate-12 transition-transform" /> View Code
                     </Button>
                   )}
                 </div>
@@ -227,7 +341,7 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
       {/* Complete section button */}
       {allProjectsViewed && (
         <motion.div 
-          className="text-center mt-6"
+          className="text-center mt-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -235,9 +349,9 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
           <Button 
             size="lg" 
             onClick={onComplete}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white group shadow-lg shadow-red-500/20"
           >
-            Discover More About Me <ArrowRight className="ml-2" />
+            Discover More About Me <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </motion.div>
       )}
