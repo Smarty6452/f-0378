@@ -110,6 +110,7 @@
   z-index: 1000;
   animation: rocketFly 3s ease-in forwards;
   font-size: 2.5rem;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
 }
 
 @keyframes rocketFly {
@@ -126,20 +127,198 @@
   }
 }
 
+/* Enhanced hover and focus animations */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  filter: drop-shadow(0 0 5px rgba(234, 56, 76, 0.7));
+  transform: translateY(-2px);
+}
+
+/* Glowing text */
+.text-glow {
+  text-shadow: 0 0 10px rgba(234, 56, 76, 0.7);
+}
+
+.yellow-glow {
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+}
+
+/* Gradient text */
+.gradient-text {
+  background-image: linear-gradient(90deg, #ea384c, #ffcc00, #ea384c);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Improved button hover effects */
+.glow-button {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.glow-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,204,0,0.3) 0%, rgba(255,204,0,0) 70%);
+  transform: rotate(30deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.glow-button:hover::after {
+  opacity: 1;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Animated background */
+.animated-bg {
+  background: linear-gradient(60deg, #1A1F2C, #262A38, #1A1F2C);
+  background-size: 600% 600%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(234, 56, 76, 0.5);
+  background: linear-gradient(to bottom, rgba(234, 56, 76, 0.7), rgba(255, 204, 0, 0.7));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(234, 56, 76, 0.7);
+  background: linear-gradient(to bottom, rgba(234, 56, 76, 0.9), rgba(255, 204, 0, 0.9));
+}
+
+/* 3D Card effect */
+.card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: all 0.5s ease;
+}
+
+.card-3d:hover {
+  transform: rotateY(5deg) rotateX(5deg) translateZ(10px);
+}
+
+/* Pulse animation */
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Floating animation */
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Star twinkle animation */
+.star-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}
+
+/* Meteors effect */
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff);
+  border-radius: 50%;
+  animation: meteor 5s linear infinite;
+}
+
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(-100px);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(300px);
+    opacity: 0;
+  }
 }
