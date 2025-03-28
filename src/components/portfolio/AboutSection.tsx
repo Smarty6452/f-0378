@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -66,10 +65,18 @@ const AboutSection = ({ onComplete }: AboutSectionProps) => {
         transition={{ duration: 0.5 }}
         className="text-center mb-10"
       >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-red-500">About Me</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-yellow-400">About Me</h2>
         <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-          Uncover my story, passion, and philosophy as you progress through this section.
+          Get to know me beyond the code - my interests, values, and what drives me.
         </p>
+        
+        <Button 
+          variant="ghost" 
+          onClick={onComplete}
+          className="mt-4 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/20"
+        >
+          Skip this section →
+        </Button>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-10">

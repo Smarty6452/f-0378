@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -105,10 +104,19 @@ const JourneyPath = ({ onComplete }: JourneyPathProps) => {
         transition={{ duration: 0.5 }}
         className="text-center mb-10"
       >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-red-500">Career Timeline</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-yellow-400">My Journey</h2>
         <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-          Navigate through my professional journey. Unlock each milestone to advance!
+          Explore the key milestones in my professional development and education.
         </p>
+        
+        {/* Skip option button */}
+        <Button 
+          variant="ghost" 
+          onClick={onComplete}
+          className="mt-4 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/20"
+        >
+          Skip this section →
+        </Button>
       </motion.div>
 
       {/* Progress bar */}

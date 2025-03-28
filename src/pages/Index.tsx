@@ -137,7 +137,7 @@ const Index = () => {
   }
 
   return (
-    <div className="bg-gradient-to-b from-[#1A1F2C] to-[#262A38] min-h-screen text-white overflow-hidden" ref={containerRef}>
+    <div className="bg-gradient-to-b from-[#0A0A15] to-[#1A1A2E] min-h-screen text-white overflow-hidden" ref={containerRef}>
       {/* Background stars */}
       {stars.map((star) => (
         <motion.div

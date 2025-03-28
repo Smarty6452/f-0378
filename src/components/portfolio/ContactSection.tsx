@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Github, Linkedin, ExternalLink, Mail, Phone } from "lucide-react";
+import { Github, Linkedin, ExternalLink, Mail, Phone, Download, FileText, Code } from "lucide-react";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -39,6 +39,28 @@ const ContactSection = () => {
     }, 1500);
   };
 
+  // Function to open WhatsApp with predefined message
+  const openWhatsApp = () => {
+    window.open(`https://wa.me/7429990414?text=Hello%20Rohit,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect.`, '_blank');
+  };
+
+  // Function to download CV
+  const downloadCV = () => {
+    // Create a blob link to the resume doc
+    const link = document.createElement('a');
+    link.href = '/lovable-uploads/rohit-cv.pdf'; // You'll need to upload this file
+    link.download = 'Rohit_Bharti_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast({
+      title: "Download Started",
+      description: "Your download should begin shortly.",
+      variant: "default",
+    });
+  };
+
   return (
     <div className="min-h-[80vh] py-8">
       <motion.div
@@ -47,7 +69,7 @@ const ContactSection = () => {
         transition={{ duration: 0.5 }}
         className="text-center mb-10"
       >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-red-500">Let's Connect</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-yellow-400">Let's Connect</h2>
         <p className="text-lg text-gray-300 max-w-2xl mx-auto">
           Congratulations on completing the adventure! Now that you know me better, let's connect and explore opportunities together.
         </p>
@@ -60,15 +82,15 @@ const ContactSection = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Card className="bg-black/40 border-red-500/30 h-full">
+          <Card className="bg-black/40 border-yellow-500/30 h-full overflow-hidden">
             <CardContent className="p-6 flex flex-col justify-between h-full">
               <div>
                 <h3 className="text-2xl font-bold mb-6 text-yellow-400">Contact Information</h3>
                 
                 <div className="space-y-6">
                   <div className="flex items-center gap-3">
-                    <div className="bg-red-500/20 p-3 rounded-full">
-                      <Mail className="w-5 h-5 text-red-500" />
+                    <div className="bg-yellow-500/20 p-3 rounded-full">
+                      <Mail className="w-5 h-5 text-yellow-500" />
                     </div>
                     <div>
                       <p className="text-sm text-gray-400">Email</p>
@@ -81,28 +103,39 @@ const ContactSection = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-3">
-                    <div className="bg-red-500/20 p-3 rounded-full">
-                      <Phone className="w-5 h-5 text-red-500" />
+                  <div className="flex items-center gap-3 cursor-pointer" onClick={openWhatsApp}>
+                    <div className="bg-yellow-500/20 p-3 rounded-full">
+                      <Phone className="w-5 h-5 text-yellow-500" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-400">Phone</p>
+                      <p className="text-sm text-gray-400">WhatsApp</p>
                       <a 
-                        href="tel:+17429990414" 
                         className="text-white hover:text-yellow-400 transition-colors"
                       >
-                        +1 742 999 0414
+                        +7429990414 (Click to chat)
                       </a>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <div className="bg-red-500/20 p-3 rounded-full">
-                      <ExternalLink className="w-5 h-5 text-red-500" />
+                    <div className="bg-yellow-500/20 p-3 rounded-full">
+                      <ExternalLink className="w-5 h-5 text-yellow-500" />
                     </div>
                     <div>
                       <p className="text-sm text-gray-400">Location</p>
                       <p className="text-white">Kitchener, Ontario, Canada</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 cursor-pointer" onClick={downloadCV}>
+                    <div className="bg-yellow-500/20 p-3 rounded-full">
+                      <FileText className="w-5 h-5 text-yellow-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">Resume</p>
+                      <span className="text-white hover:text-yellow-400 transition-colors flex items-center">
+                        Download CV <Download className="ml-2 w-4 h-4" />
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -112,7 +145,7 @@ const ContactSection = () => {
                 <h4 className="text-lg font-semibold mb-3 text-yellow-400">Connect with me</h4>
                 <div className="flex gap-4">
                   <a 
-                    href="https://github.com/thecodingrohit" 
+                    href="https://github.com/Smarty6452" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition-colors"
@@ -127,6 +160,14 @@ const ContactSection = () => {
                   >
                     <Linkedin className="w-5 h-5" />
                   </a>
+                  <a 
+                    href="https://www.hackerrank.com/profile/rohit_21910374" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-[#2EC866] hover:bg-[#2EC866]/80 p-3 rounded-full transition-colors"
+                  >
+                    <Code className="w-5 h-5" />
+                  </a>
                 </div>
               </div>
             </CardContent>
@@ -139,7 +180,7 @@ const ContactSection = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Card className="bg-black/40 border-red-500/30">
+          <Card className="bg-black/40 border-yellow-500/30">
             <CardContent className="p-6">
               <h3 className="text-2xl font-bold mb-6 text-yellow-400">Send Me a Message</h3>
               
@@ -153,7 +194,7 @@ const ContactSection = () => {
                     onChange={handleChange}
                     placeholder="Your name"
                     required
-                    className="bg-black/60 border-gray-700 focus:border-red-500 text-white"
+                    className="bg-black/60 border-gray-700 focus:border-yellow-500 text-white"
                   />
                 </div>
                 
@@ -167,7 +208,7 @@ const ContactSection = () => {
                     onChange={handleChange}
                     placeholder="your.email@example.com"
                     required
-                    className="bg-black/60 border-gray-700 focus:border-red-500 text-white"
+                    className="bg-black/60 border-gray-700 focus:border-yellow-500 text-white"
                   />
                 </div>
                 
@@ -181,13 +222,13 @@ const ContactSection = () => {
                     placeholder="Your message here..."
                     required
                     rows={5}
-                    className="bg-black/60 border-gray-700 focus:border-red-500 text-white"
+                    className="bg-black/60 border-gray-700 focus:border-yellow-500 text-white"
                   />
                 </div>
                 
                 <Button 
                   type="submit" 
-                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                  className="w-full bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-black font-medium"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}

@@ -259,48 +259,19 @@ const SkillsTree = ({ onComplete }: SkillsTreeProps) => {
         transition={{ duration: 0.5 }}
         className="text-center mb-10"
       >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-glow bg-gradient-to-r from-yellow-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
-          Skills Tree
-        </h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-yellow-400">Skills & Expertise</h2>
         <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-          Collect skills by playing mini-games! Unlock all skills to complete this section.
+          Unlock skills by playing a simple game or skip ahead to see all my technical abilities!
         </p>
-        <div className="mt-4 font-mono text-yellow-500">
-          Skills Unlocked: {unlockedCount} / {skills.length}
-        </div>
         
-        {/* Game selection buttons */}
-        {!showMemoryGame && !showStarGame && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mt-4 flex flex-wrap justify-center gap-3"
-          >
-            <Button 
-              onClick={initializeMemoryGame}
-              variant="outline" 
-              className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
-            >
-              <Cpu className="w-4 h-4 mr-2" /> Play Memory Match Game
-            </Button>
-            
-            <Button 
-              onClick={initializeStarGame}
-              variant="outline" 
-              className="border-red-500 text-red-500 hover:bg-red-500/10"
-            >
-              <Star className="w-4 h-4 mr-2" /> Play Star Collection Game
-            </Button>
-            
-            <Button 
-              onClick={handleDirectUnlock}
-              variant="outline" 
-              className="border-green-500 text-green-500 hover:bg-green-500/10"
-            >
-              <Zap className="w-4 h-4 mr-2" /> Instant Skill Unlock
-            </Button>
-          </motion.div>
-        )}
+        {/* Skip option button */}
+        <Button 
+          variant="ghost" 
+          onClick={onComplete}
+          className="mt-4 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/20"
+        >
+          Skip this section →
+        </Button>
       </motion.div>
 
       {/* Star Collection Game */}

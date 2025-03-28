@@ -25,12 +25,12 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
   const [projects] = useState<Project[]>([
     {
       id: "project-1",
-      title: "G-Test Login (Driving Test App)",
-      description: "A full-stack application using Node.js and MongoDB to manage driver data and bookings. Features secure login with bcrypt, role-based access control, and Toastify.js notifications.",
+      title: "DriveTest App",
+      description: "A full-stack application using Node.js and MongoDB to manage driver data and bookings. Features secure login, role-based access control, and RESTful APIs.",
       image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1740&auto=format&fit=crop",
-      demoLink: "https://g-test-login.vercel.app/",
+      demoLink: "https://drivingtestapp2-0.onrender.com/login",
       codeLink: "https://github.com/thecodingrohit/G-test-login",
-      techStack: ["Node.js", "Express", "MongoDB", "React", "bcrypt", "JWT", "Toastify.js"],
+      techStack: ["Node.js", "Express", "MongoDB", "HTML/CSS", "JavaScript", "RESTful APIs"],
       featured: true
     },
     {
@@ -38,24 +38,25 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
       title: "ML Fall Detection System",
       description: "A machine learning-based human fall detection system differentiating between various activities and fall scenarios in real-time. Published research project.",
       image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=600",
+      demoLink: "https://ijritcc.org/index.php/ijritcc/article/view/8638",
       techStack: ["Python", "Machine Learning", "Data Analysis", "Classification Algorithms"],
       featured: true
     },
     {
       id: "project-3",
-      title: "Personal Portfolio (React)",
-      description: "A responsive portfolio website built with React.js and Tailwind CSS, showcasing my projects and skills with smooth animations and modern design.",
+      title: "WordPlay Utility App",
+      description: "A responsive React application providing text transformation utilities with a clean interface and multiple text manipulation options.",
       image: "https://images.unsplash.com/photo-1481487196290-c152efe083f5?w=600",
-      demoLink: "https://rohit-bharti-portfolio-react.netlify.app/",
-      codeLink: "https://github.com/thecodingrohit/portfolio",
-      techStack: ["React", "Tailwind CSS", "Responsive Design", "Netlify"],
+      demoLink: "https://word-play-utility.netlify.app/",
+      codeLink: "https://github.com/Smarty6452/SmartyFitness",
+      techStack: ["React", "JavaScript", "Bootstrap", "Text Processing"],
     },
     {
       id: "project-4",
       title: "AuthZ - MERN Authentication",
       description: "A secure authentication system using Node.js, Express, React, and JWT encryption with role-based access control for improved security.",
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600",
-      codeLink: "https://github.com/thecodingrohit/authZ",
+      codeLink: "https://github.com/Smarty6452/AuthZ_MERN",
       techStack: ["MERN Stack", "JWT", "Authentication", "Security", "Role-based Access"],
     },
     {
@@ -63,14 +64,27 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
       title: "SkyCar Rental Project",
       description: "Built dynamic web pages for a car rental application using Ant Design, HTML, and JavaScript. Integrated with payment gateways and backend APIs.",
       image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600",
+      demoLink: "https://skycarproject.netlify.app/",
+      codeLink: "https://github.com/Smarty6452/gauge",
       techStack: ["React", "Ant Design", "Payment Integration", "Responsive UI"],
     },
     {
       id: "project-6",
-      title: "Hotel Chain LMS",
-      description: "Learning Management System developed for a hotel chain to improve training efficiency. Built with React.js and Tailwind CSS with API integrations.",
+      title: "Gauge Water Purifier",
+      description: "A responsive website for a water purifier company featuring product details, testimonials, and contact information with modern design.",
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
-      techStack: ["React.js", "Tailwind CSS", "LMS", "API Integration"],
+      demoLink: "https://gaugerowebiste.netlify.app/",
+      codeLink: "https://github.com/Smarty6452/gauge",
+      techStack: ["HTML", "CSS", "JavaScript", "Responsive Design"],
+    },
+    {
+      id: "project-7",
+      title: "CRM Sales Dashboard",
+      description: "A customer relationship management dashboard with sales tracking, customer data management, and reporting capabilities.",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600",
+      demoLink: "https://crmsales.netlify.app/",
+      codeLink: "https://github.com/Smarty6452/crm",
+      techStack: ["React", "Dashboard UI", "Data Visualization", "User Management"],
     }
   ]);
 
@@ -100,9 +114,16 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
         <p className="text-lg text-gray-300 max-w-2xl mx-auto">
           Explore my key projects. <span className="text-yellow-400">Click on each card</span> to learn more!
         </p>
+        
+        <Button 
+          variant="ghost" 
+          onClick={onComplete}
+          className="mt-2 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/20"
+        >
+          Skip this section →
+        </Button>
       </motion.div>
 
-      {/* Featured projects section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -179,7 +200,6 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
         </div>
       </motion.div>
 
-      {/* Other projects section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -250,7 +270,6 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
         </div>
       </motion.div>
 
-      {/* Project detail modal */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
@@ -338,7 +357,6 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
         )}
       </AnimatePresence>
 
-      {/* Complete section button */}
       {allProjectsViewed && (
         <motion.div 
           className="text-center mt-10"
