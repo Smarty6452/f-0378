@@ -29,7 +29,7 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
       description: "A full-stack application using Node.js and MongoDB to manage driver data and bookings. Features secure login, role-based access control, and RESTful APIs.",
       image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1740&auto=format&fit=crop",
       demoLink: "https://drivingtestapp2-0.onrender.com/login",
-      codeLink: "https://github.com/thecodingrohit/G-test-login",
+      codeLink: "https://github.com/Smarty6452/drivingtestapp",
       techStack: ["Node.js", "Express", "MongoDB", "HTML/CSS", "JavaScript", "RESTful APIs"],
       featured: true
     },
@@ -48,7 +48,7 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
       description: "A responsive React application providing text transformation utilities with a clean interface and multiple text manipulation options.",
       image: "https://images.unsplash.com/photo-1481487196290-c152efe083f5?w=600",
       demoLink: "https://word-play-utility.netlify.app/",
-      codeLink: "https://github.com/Smarty6452/SmartyFitness",
+      codeLink: "https://github.com/Smarty6452/Word-Play",
       techStack: ["React", "JavaScript", "Bootstrap", "Text Processing"],
     },
     {
@@ -65,8 +65,8 @@ const ProjectsShowcase = ({ onComplete }: ProjectsShowcaseProps) => {
       description: "Built dynamic web pages for a car rental application using Ant Design, HTML, and JavaScript. Integrated with payment gateways and backend APIs.",
       image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600",
       demoLink: "https://skycarproject.netlify.app/",
-      codeLink: "https://github.com/Smarty6452/gauge",
-      techStack: ["React", "Ant Design", "Payment Integration", "Responsive UI"],
+      codeLink: "https://github.com/Smarty6452/skycar",
+      techStack: ["React","REDUX", "Ant Design", "Payment Integration", "Responsive UI"],
     },
     {
       id: "project-6",

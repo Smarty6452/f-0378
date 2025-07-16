@@ -46,8 +46,8 @@ const HeroSection = ({ onContinue, onEasterEgg }: HeroSectionProps) => {
   }, []);
 
   const socialLinks = [
-    { icon: <Github className="h-5 w-5" />, url: "https://github.com/thecodingrohit", color: "text-white" },
-    { icon: <Linkedin className="h-5 w-5" />, url: "https://www.linkedin.com/in/rohit-bharti-", color: "text-blue-400" },
+    { icon: <Github className="h-5 w-5" />, url: "https://github.com/Smarty6452", color: "text-white" },
+    { icon: <Linkedin className="h-5 w-5" />, url: "https://www.linkedin.com/in/rohit-bharti-/", color: "text-blue-400" },
     { icon: <Mail className="h-5 w-5" />, url: "mailto:rohitbharti326452@gmail.com", color: "text-red-400" },
     { icon: <Phone className="h-5 w-5" />, url: "tel:+17429990414", color: "text-green-400" },
   ];
@@ -166,7 +166,7 @@ const HeroSection = ({ onContinue, onEasterEgg }: HeroSectionProps) => {
                 variant="outline" 
                 size="lg"
                 className="border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500/10 glow-button relative overflow-hidden group"
-                onClick={() => window.open("https://github.com/thecodingrohit", "_blank")}
+                onClick={() => window.open("https://github.com/Smarty6452", "_blank")}
               >
                 <span className="relative z-10 flex items-center">
                   <Github className="mr-2 h-4 w-4 group-hover:rotate-12 transition-transform" /> View Github
