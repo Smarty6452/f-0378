@@ -1,196 +1,99 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, User, Lightbulb, Leaf, Award, Trophy } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { GraduationCap, Award, Users } from "lucide-react";
 
-interface AboutSectionProps {
-  onComplete: () => void;
-}
-
-const AboutSection = ({ onComplete }: AboutSectionProps) => {
-  const [currentParagraph, setCurrentParagraph] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
-
-  const paragraphs = [
+const AboutSection = () => {
+  const education = [
     {
-      id: "intro",
-      title: "Who Am I?",
-      content: "I'm Rohit Bharti, a passionate web developer with a flair for creativity and a keen eye for detail. I specialize in React.js, JavaScript, and Node.js, combining technical expertise with innovative thinking to create engaging digital experiences.",
-      icon: <User className="w-10 h-10 text-red-500" />,
+      degree: "Postgraduate Diploma in Web Development",
+      school: "Conestoga College",
+      location: "Kitchener, ON",
+      period: "2024 - 2025",
+      gpa: "3.77/4.0",
     },
     {
-      id: "passion",
-      title: "My Passion",
-      content: "From coding to design, I find joy in expressing ideas through the fusion of technology and aesthetics. I believe in clean, maintainable code and user-centered design principles that elevate the digital experience.",
-      icon: <Lightbulb className="w-10 h-10 text-yellow-500" />,
-    },
-    {
-      id: "growth",
-      title: "Growth Mindset",
-      content: "I'm committed to continuous learning and growth. Whether it's mastering a new framework, improving accessibility standards, or refining my design skills, I embrace every opportunity to expand my knowledge.",
-      icon: <Leaf className="w-10 h-10 text-green-500" />,
-    },
-    {
-      id: "achievements",
-      title: "Achievements",
-      content: "Throughout my career, I've successfully delivered impactful projects, including hotel management systems, learning platforms, and authentication systems, always focusing on quality, performance, and user experience.",
-      icon: <Trophy className="w-10 h-10 text-yellow-500" />,
-    },
-    {
-      id: "philosophy",
-      title: "My Philosophy",
-      content: "I believe in turning concepts into captivating digital experiences through collaboration and innovation. My approach combines technical precision with creative problem-solving to deliver solutions that exceed expectations.",
-      icon: <Award className="w-10 h-10 text-red-500" />,
+      degree: "Bachelor of Science in Computer Engineering",
+      school: "VIIT College, SPPU University",
+      location: "Pune, India",
+      period: "2019 - 2023",
+      gpa: "9.3/10",
     },
   ];
 
-  useEffect(() => {
-    if (currentParagraph >= paragraphs.length) {
-      setIsComplete(true);
-    }
-  }, [currentParagraph, paragraphs.length]);
-
-  const revealNextParagraph = () => {
-    if (currentParagraph < paragraphs.length) {
-      setCurrentParagraph(prev => prev + 1);
-    }
-  };
+  const volunteering = [
+    {
+      role: "Executive Lead, Google Developer Student Club (GDSC)",
+      organization: "Conestoga College",
+      description: "Led technical workshops on web development and APIs, sharing knowledge with 100+ students. Organized 5+ tech events, increasing student attendance by 30%.",
+    },
+    {
+      role: "Student Engagement Program Mentor",
+      organization: "Conestoga College",
+      description: "Mentored 50+ students, designing daily activities and enhancing curriculum engagement, resulting in a 40% increase in active participation.",
+    },
+  ];
 
   return (
-    <div className="min-h-[80vh] py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-10"
-      >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-yellow-400">About Me</h2>
-        <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-          Get to know me beyond the code - my interests, values, and what drives me.
-        </p>
-        
-        <Button 
-          variant="ghost" 
-          onClick={onComplete}
-          className="mt-4 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/20"
-        >
-          Skip this section →
-        </Button>
-      </motion.div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-10">
-        {/* Profile image */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-center justify-center"
-        >
-          <div className="w-64 h-64 md:w-80 md:h-80 mb-6 relative rounded-lg overflow-hidden border-4 border-red-500 shadow-lg shadow-red-500/20">
-            <img 
-              src="/lovable-uploads/49a17589-9665-46c7-9c6f-4b0c0e8b75ac.png" 
-              alt="Rohit Bharti" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
-              <h3 className="text-xl font-bold text-white">Rohit Bharti</h3>
-              <p className="text-gray-200 text-sm">Web Developer | Problem Solver | Creator</p>
-            </div>
-          </div>
-          
-          <div className="space-y-2 text-center">
-            <p className="text-white">Currently located in <span className="text-yellow-400">Kitchener, Ontario, Canada</span></p>
-            <p className="text-gray-300">Pursuing Web Development at Conestoga College</p>
-          </div>
-        </motion.div>
-
-        {/* Story cards */}
-        <div className="space-y-4">
-          {paragraphs.slice(0, currentParagraph).map((paragraph, index) => (
-            <motion.div
-              key={paragraph.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-            >
-              <Card className="bg-black/40 border-red-500/30">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-black/60 p-3 rounded-full">
-                      {paragraph.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold mb-2 text-yellow-400">{paragraph.title}</h3>
-                      <p className="text-gray-300">{paragraph.content}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-          
-          {currentParagraph < paragraphs.length && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: paragraphs.slice(0, currentParagraph).length * 0.2 }}
-              className="text-center mt-6"
-            >
-              <Button 
-                onClick={revealNextParagraph}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                Reveal More <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </motion.div>
-          )}
-        </div>
-      </div>
-
-      {/* Fun facts section - Only shown when all paragraphs are revealed */}
-      {isComplete && (
+    <section className="py-20 px-4 bg-muted/30">
+      <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-3xl mx-auto mt-12 bg-black/30 p-6 rounded-lg border border-yellow-500/30"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
         >
-          <h3 className="text-xl font-bold mb-4 text-center text-yellow-400">Fun Facts About Me</h3>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-200">
-            <li className="flex items-center gap-2">
-              <span className="text-red-500">•</span> I sketch in my free time as a creative outlet
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-red-500">•</span> I enjoy exploring new technologies and frameworks
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-red-500">•</span> I'm passionate about creating user-friendly interfaces
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-red-500">•</span> I speak English and Hindi fluently
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-red-500">•</span> I love organizing community campaigns
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-red-500">•</span> I enjoy mentoring team members
-            </li>
-          </ul>
-          
-          <div className="text-center mt-8">
-            <Button 
-              size="lg" 
-              onClick={onComplete}
-              className="bg-red-600 hover:bg-red-700 text-white"
-            >
-              Complete My Story & Connect With Me <ArrowRight className="ml-2" />
-            </Button>
+          <h2 className="text-4xl font-bold text-center mb-4">
+            About <span className="text-primary">Me</span>
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+            A dedicated software developer with a passion for creating innovative solutions and mentoring others.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16"
+        >
+          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <GraduationCap className="w-6 h-6 text-primary" />
+            Education
+          </h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {education.map((edu, index) => (
+              <Card key={index} className="p-6 border-l-4 border-l-primary">
+                <h4 className="font-bold text-lg mb-2">{edu.degree}</h4>
+                <p className="text-primary font-medium mb-1">{edu.school}</p>
+                <p className="text-sm text-muted-foreground mb-2">
+                  {edu.location} • {edu.period}
+                </p>
+                <p className="text-sm font-medium">GPA: {edu.gpa}</p>
+              </Card>
+            ))}
           </div>
         </motion.div>
-      )}
-    </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <Users className="w-6 h-6 text-primary" />
+            Volunteer Experience
+          </h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {volunteering.map((vol, index) => (
+              <Card key={index} className="p-6 border-l-4 border-l-accent">
+                <h4 className="font-bold text-lg mb-2">{vol.role}</h4>
+                <p className="text-primary font-medium mb-3">{vol.organization}</p>
+                <p className="text-sm text-muted-foreground">{vol.description}</p>
+              </Card>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 };
 

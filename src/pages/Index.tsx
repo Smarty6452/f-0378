@@ -1,224 +1,194 @@
 
-import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import HeroSection from "@/components/portfolio/HeroSection";
-import JourneyPath from "@/components/portfolio/JourneyPath";
-import SkillsTree from "@/components/portfolio/SkillsTree";
-import ProjectsShowcase from "@/components/portfolio/ProjectsShowcase";
 import AboutSection from "@/components/portfolio/AboutSection";
+import SkillsTree from "@/components/portfolio/SkillsTree";
+import JourneyPath from "@/components/portfolio/JourneyPath";
+import ProjectsShowcase from "@/components/portfolio/ProjectsShowcase";
 import ContactSection from "@/components/portfolio/ContactSection";
-import NavControls from "@/components/portfolio/NavControls";
-import { Flame, Star } from "lucide-react";
-
-// Define the sections/levels of the portfolio journey
-type Section = "hero" | "journey" | "skills" | "projects" | "about" | "contact";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Index = () => {
-  const [currentSection, setCurrentSection] = useState<Section>("hero");
-  const [unlocked, setUnlocked] = useState<Section[]>(["hero"]);
-  const [loaded, setLoaded] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
-  const [stars, setStars] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
+  const [activeSection, setActiveSection] = useState("home");
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setLoaded(true);
-    }, 1000);
-    
-    // Generate background stars
-    const newStars = Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 2 + 1, // Size between 1 and 3
-    }));
-    setStars(newStars);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
 
-    return () => clearTimeout(timer);
+      // Update active section based on scroll position
+      const sections = ["home", "about", "experience", "skills", "projects", "contact"];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Easter egg function
-  const handleEasterEgg = () => {
-    toast({
-      title: "Easter Egg Found! 🚀",
-      description: "You've unlocked a hidden animation!",
-      variant: "default",
-    });
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
 
-    // Add any special animation or effect here
-    const rocketEl = document.createElement("div");
-    rocketEl.innerHTML = `<div class="rocket-animation"><span>🚀</span></div>`;
-    document.body.appendChild(rocketEl);
-
-    setTimeout(() => {
-      document.body.removeChild(rocketEl);
-    }, 3000);
-  };
-
-  // Function to unlock next section
-  const unlockSection = (section: Section) => {
-    if (!unlocked.includes(section)) {
-      setUnlocked([...unlocked, section]);
-      toast({
-        title: "New Level Unlocked! 🎮",
-        description: `You've unlocked the ${section.charAt(0).toUpperCase() + section.slice(1)} section!`,
-        variant: "default",
-      });
-    }
-    setCurrentSection(section);
-  };
-
-  // Handle navigation
-  const navigate = (section: Section) => {
-    if (unlocked.includes(section) || section === "hero") {
-      setCurrentSection(section);
-    } else {
-      toast({
-        title: "Level Locked! 🔒",
-        description: "Complete the current level to unlock this section.",
-        variant: "destructive",
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
       });
     }
   };
 
-  if (!loaded) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-[#1A1F2C] to-black animated-bg">
-        <div className="text-yellow-400 flex flex-col items-center">
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 5, -5, 0],
-              filter: ['drop-shadow(0 0 8px rgba(255,204,0,0.3))', 'drop-shadow(0 0 15px rgba(255,204,0,0.5))', 'drop-shadow(0 0 8px rgba(255,204,0,0.3))']
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <Flame className="w-16 h-16 mb-4" />
-          </motion.div>
-          <motion.h1 
-            className="text-2xl font-bold gradient-text mb-3"
-            animate={{
-              opacity: [0.7, 1, 0.7],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            Loading Rohit's Adventure...
-          </motion.h1>
-          <motion.div 
-            className="w-64 h-2 bg-gray-800 rounded-full overflow-hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <motion.div 
-              className="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-red-500"
-              initial={{ width: 0 }}
-              animate={{ width: "100%" }}
-              transition={{ 
-                duration: 1.5,
-                ease: "easeInOut",
-              }}
-            />
-          </motion.div>
-        </div>
-      </div>
-    );
-  }
+  const navItems = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "experience", label: "Experience" },
+    { id: "skills", label: "Skills" },
+    { id: "projects", label: "Projects" },
+    { id: "contact", label: "Contact" },
+  ];
+
+  const NavLinks = ({ mobile = false, closeSheet }: { mobile?: boolean; closeSheet?: () => void }) => (
+    <>
+      {navItems.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => {
+            scrollToSection(item.id);
+            closeSheet?.();
+          }}
+          className={`${
+            mobile ? "block w-full text-left px-4 py-3" : "px-4 py-2"
+          } text-sm font-medium transition-colors rounded-md ${
+            activeSection === item.id
+              ? "text-primary bg-primary/10"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+          }`}
+        >
+          {item.label}
+        </button>
+      ))}
+    </>
+  );
 
   return (
-    <div className="bg-gradient-to-b from-[#0A0A15] to-[#1A1A2E] min-h-screen text-white overflow-hidden" ref={containerRef}>
-      {/* Background stars */}
-      {stars.map((star) => (
-        <motion.div
-          key={star.id}
-          className="absolute rounded-full bg-white opacity-70 z-0"
-          style={{ 
-            left: `${star.x}%`, 
-            top: `${star.y}%`,
-            width: `${star.size}px`,
-            height: `${star.size}px`,
-          }}
-          animate={{
-            opacity: [0.3, 0.7, 0.3],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: Math.random() * 3 + 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: Math.random() * 2,
-          }}
-        />
-      ))}
-      
-      {/* Top navigation controls */}
-      <NavControls 
-        currentSection={currentSection} 
-        unlocked={unlocked} 
-        onNavigate={navigate} 
-      />
-      
-      {/* Main content area with AnimatePresence for smooth transitions */}
-      <AnimatePresence mode="wait">
-        <motion.main
-          key={currentSection}
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -100 }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 100, 
-            damping: 20 
-          }}
-          className="container mx-auto p-4 pt-20 relative z-10"
+    <div className="min-h-screen bg-background">
+      {/* Fixed Navigation */}
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-background/80 backdrop-blur-md shadow-md border-b"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2"
+            >
+              <img
+                src="/lovable-uploads/49a17589-9665-46c7-9c6f-4b0c0e8b75ac.png"
+                alt="Rohit Bharti"
+                className="w-10 h-10 rounded-full border-2 border-primary"
+              />
+              <span className="text-lg font-bold">
+                <span className="text-foreground">Rohit</span>
+                <span className="text-primary">Bharti</span>
+              </span>
+            </motion.div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-2">
+              <NavLinks />
+            </div>
+
+            {/* Mobile Navigation */}
+            <Sheet>
+              <SheetTrigger asChild className="md:hidden">
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <div className="flex flex-col gap-2 mt-8">
+                  <NavLinks mobile closeSheet={() => {}} />
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </motion.nav>
+
+      {/* Sections */}
+      <div id="home">
+        <HeroSection />
+      </div>
+
+      <div id="about">
+        <AboutSection />
+      </div>
+
+      <div id="experience">
+        <JourneyPath />
+      </div>
+
+      <div id="skills">
+        <SkillsTree />
+      </div>
+
+      <div id="projects">
+        <ProjectsShowcase />
+      </div>
+
+      <div id="contact">
+        <ContactSection />
+      </div>
+
+      {/* Scroll to Top Button */}
+      {isScrolled && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          onClick={() => scrollToSection("home")}
+          className="fixed bottom-8 right-8 p-3 bg-primary text-primary-foreground rounded-full shadow-lg hover:shadow-xl transition-shadow z-40"
         >
-          {currentSection === "hero" && (
-            <HeroSection 
-              onContinue={() => unlockSection("journey")} 
-              onEasterEgg={handleEasterEgg} 
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 10l7-7m0 0l7 7m-7-7v18"
             />
-          )}
-          
-          {currentSection === "journey" && (
-            <JourneyPath 
-              onComplete={() => unlockSection("skills")} 
-            />
-          )}
-          
-          {currentSection === "skills" && (
-            <SkillsTree 
-              onComplete={() => unlockSection("projects")} 
-            />
-          )}
-          
-          {currentSection === "projects" && (
-            <ProjectsShowcase 
-              onComplete={() => unlockSection("about")} 
-            />
-          )}
-          
-          {currentSection === "about" && (
-            <AboutSection 
-              onComplete={() => unlockSection("contact")} 
-            />
-          )}
-          
-          {currentSection === "contact" && (
-            <ContactSection />
-          )}
-        </motion.main>
-      </AnimatePresence>
+          </svg>
+        </motion.button>
+      )}
     </div>
   );
 };
