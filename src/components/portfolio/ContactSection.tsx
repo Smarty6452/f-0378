@@ -1,260 +1,101 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Github, Linkedin, ExternalLink, Mail, Phone, Download, FileText, Code } from "lucide-react";
+import { Mail, Phone, MapPin, Download, Github, Linkedin } from "lucide-react";
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
     setTimeout(() => {
-      toast({
-        title: "Message Sent! 🚀",
-        description: "Thanks for reaching out. I'll get back to you soon!",
-        variant: "default",
-      });
+      toast({ title: "Message Sent!", description: "I'll reply soon!" });
       setFormData({ name: "", email: "", message: "" });
       setIsSubmitting(false);
     }, 1500);
   };
 
-  // Function to open WhatsApp with predefined message
-  const openWhatsApp = () => {
-    window.open(`https://wa.me/7429990414?text=Hello%20Rohit,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect.`, '_blank');
-  };
-
-  // Function to download CV
-  const downloadCV = () => {
-    // Create a blob link to the resume doc
-    const link = document.createElement('a');
-    link.href = '/lovable-uploads/rohit-cv.pdf'; // You'll need to upload this file
-    link.download = 'Rohit_Bharti_Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    toast({
-      title: "Download Started",
-      description: "Your download should begin shortly.",
-      variant: "default",
-    });
-  };
-
   return (
-    <div className="min-h-[80vh] py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-10"
-      >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-yellow-400">Let's Connect</h2>
-        <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-          Congratulations on completing the adventure! Now that you know me better, let's connect and explore opportunities together.
-        </p>
-      </motion.div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        {/* Contact Info */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
+    <section className="py-20 px-4 bg-black" id="contact">
+      <div className="container mx-auto max-w-4xl">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-4xl font-bold text-center mb-12 text-blue-400"
         >
-          <Card className="bg-black/40 border-yellow-500/30 h-full overflow-hidden">
-            <CardContent className="p-6 flex flex-col justify-between h-full">
-              <div>
-                <h3 className="text-2xl font-bold mb-6 text-yellow-400">Contact Information</h3>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-yellow-500/20 p-3 rounded-full">
-                      <Mail className="w-5 h-5 text-yellow-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">Email</p>
-                      <a 
-                        href="mailto:rohitbharti326452@gmail.com" 
-                        className="text-white hover:text-yellow-400 transition-colors"
-                      >
-                        rohitbharti326452@gmail.com
-                      </a>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3 cursor-pointer" onClick={openWhatsApp}>
-                    <div className="bg-yellow-500/20 p-3 rounded-full">
-                      <Phone className="w-5 h-5 text-yellow-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">WhatsApp</p>
-                      <a 
-                        className="text-white hover:text-yellow-400 transition-colors"
-                      >
-                        +7429990414 (Click to chat)
-                      </a>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="bg-yellow-500/20 p-3 rounded-full">
-                      <ExternalLink className="w-5 h-5 text-yellow-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">Location</p>
-                      <p className="text-white">Kitchener, Ontario, Canada</p>
-                    </div>
-                  </div>
+          Let's Connect
+        </motion.h2>
 
-                  <div className="flex items-center gap-3 cursor-pointer" onClick={downloadCV}>
-                    <div className="bg-yellow-500/20 p-3 rounded-full">
-                      <FileText className="w-5 h-5 text-yellow-500" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">Resume</p>
-                      <span className="text-white hover:text-yellow-400 transition-colors flex items-center">
-                        Download CV <Download className="ml-2 w-4 h-4" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
+        <div className="grid md:grid-cols-2 gap-8">
+          <Card className="bg-gradient-to-br from-blue-900/30 to-black border-blue-700 p-6">
+            <h3 className="text-xl font-bold mb-6 text-white">Get in Touch</h3>
+            <div className="space-y-4">
+              <a href="mailto:rohitbharti326452@gmail.com" className="flex items-center gap-3 text-gray-300 hover:text-blue-400">
+                <Mail /> rohitbharti326452@gmail.com
+              </a>
+              <a href="https://wa.me/17429990414" className="flex items-center gap-3 text-gray-300 hover:text-blue-400">
+                <Phone /> +1 (742) 999-0414
+              </a>
+              <div className="flex items-center gap-3 text-gray-300">
+                <MapPin /> Kitchener, ON, Canada
               </div>
-              
-              <div className="mt-8">
-                <h4 className="text-lg font-semibold mb-3 text-yellow-400">Connect with me</h4>
-                <div className="flex gap-4">
-                  <a 
-                    href="https://github.com/Smarty6452" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition-colors"
-                  >
-                    <Github className="w-5 h-5" />
-                  </a>
-                  <a 
-                    href="https://www.linkedin.com/in/rohit-bharti-" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="bg-[#0077B5] hover:bg-[#0077B5]/80 p-3 rounded-full transition-colors"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                  <a 
-                    href="https://www.hackerrank.com/profile/rohit_21910374" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="bg-[#2EC866] hover:bg-[#2EC866]/80 p-3 rounded-full transition-colors"
-                  >
-                    <Code className="w-5 h-5" />
-                  </a>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+              <a href="/Rohit_Bharti_Resume.pdf" download className="flex items-center gap-3 text-gray-300 hover:text-blue-400">
+                <Download /> Download CV
+              </a>
+            </div>
 
-        {/* Contact Form */}
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <Card className="bg-black/40 border-yellow-500/30">
-            <CardContent className="p-6">
-              <h3 className="text-2xl font-bold mb-6 text-yellow-400">Send Me a Message</h3>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-gray-300 mb-1">Name</label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Your name"
-                    required
-                    className="bg-black/60 border-gray-700 focus:border-yellow-500 text-white"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-gray-300 mb-1">Email</label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="your.email@example.com"
-                    required
-                    className="bg-black/60 border-gray-700 focus:border-yellow-500 text-white"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block text-gray-300 mb-1">Message</label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Your message here..."
-                    required
-                    rows={5}
-                    className="bg-black/60 border-gray-700 focus:border-yellow-500 text-white"
-                  />
-                </div>
-                
-                <Button 
-                  type="submit" 
-                  className="w-full bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-black font-medium"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </Button>
-              </form>
-            </CardContent>
+            <div className="flex gap-4 mt-6">
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://github.com/Smarty6452"><Github /></a>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://www.linkedin.com/in/rohit-bharti-/"><Linkedin /></a>
+              </Button>
+            </div>
           </Card>
-        </motion.div>
-      </div>
 
-      {/* Thank you message */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-        className="text-center mt-12"
-      >
-        <div className="max-w-2xl mx-auto bg-black/30 p-6 rounded-lg border border-yellow-500/30">
-          <h3 className="text-xl font-bold mb-2 text-yellow-400">Thank You for Visiting!</h3>
-          <p className="text-gray-300">
-            Thank you for exploring my interactive portfolio. I hope you enjoyed the journey through my skills and projects. 
-            I look forward to connecting with you and exploring potential collaborations!
-          </p>
+          <Card className="bg-gradient-to-br from-red-900/30 to-black border-red-700 p-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                placeholder="Your Name"
+                name="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+                className="bg-black/50 border-blue-700 text-white"
+              />
+              <Input
+                type="email"
+                placeholder="Your Email"
+                name="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+                className="bg-black/50 border-blue-700 text-white"
+              />
+              <Textarea
+                placeholder="Your Message"
+                name="message"
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                required
+                className="bg-black/50 border-blue-700 text-white min-h-32"
+              />
+              <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-700 hover:to-red-700" disabled={isSubmitting}>
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </Button>
+            </form>
+          </Card>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </section>
   );
 };
 

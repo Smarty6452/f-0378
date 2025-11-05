@@ -1,97 +1,68 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import { GraduationCap, Award, Users } from "lucide-react";
+import { GraduationCap, Award } from "lucide-react";
 
 const AboutSection = () => {
   const education = [
-    {
-      degree: "Postgraduate Diploma in Web Development",
-      school: "Conestoga College",
-      location: "Kitchener, ON",
-      period: "2024 - 2025",
-      gpa: "3.77/4.0",
-    },
-    {
-      degree: "Bachelor of Science in Computer Engineering",
-      school: "VIIT College, SPPU University",
-      location: "Pune, India",
-      period: "2019 - 2023",
-      gpa: "9.3/10",
-    },
+    { degree: "Postgraduate Diploma in Web Development", school: "Conestoga College", location: "Kitchener, ON", period: "2024 - 2025", gpa: "3.77/4.0" },
+    { degree: "B.Sc. Computer Engineering", school: "VIIT College, SPPU", location: "Pune, India", period: "2019 - 2023", gpa: "9.3/10" },
   ];
 
   const volunteering = [
-    {
-      role: "Executive Lead, Google Developer Student Club (GDSC)",
-      organization: "Conestoga College",
-      description: "Led technical workshops on web development and APIs, sharing knowledge with 100+ students. Organized 5+ tech events, increasing student attendance by 30%.",
-    },
-    {
-      role: "Student Engagement Program Mentor",
-      organization: "Conestoga College",
-      description: "Mentored 50+ students, designing daily activities and enhancing curriculum engagement, resulting in a 40% increase in active participation.",
-    },
+    { role: "GDSC Executive Lead", org: "Conestoga College", desc: "Led 5+ tech events, 100+ students" },
+    { role: "Mentor", org: "Conestoga College", desc: "Mentored 50+ students, boosted engagement 40%" },
   ];
 
   return (
-    <section className="py-20 px-4 bg-muted/30">
-      <div className="container mx-auto max-w-6xl">
-        <motion.div
+    <section className="py-20 px-4 bg-gradient-to-b from-black to-blue-950" id="about">
+      <div className="container mx-auto max-w-5xl">
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          className="text-4xl font-bold text-center mb-4 text-blue-400"
         >
-          <h2 className="text-4xl font-bold text-center mb-4">
-            About <span className="text-primary">Me</span>
-          </h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            A dedicated software developer with a passion for creating innovative solutions and mentoring others.
-          </p>
-        </motion.div>
+          About Me
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-center text-gray-300 mb-12 max-w-2xl mx-auto"
+        >
+          A passionate developer turning ideas into reality with clean code and modern tech.
+        </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <GraduationCap className="w-6 h-6 text-primary" />
-            Education
-          </h3>
-          <div className="grid md:grid-cols-2 gap-6">
-            {education.map((edu, index) => (
-              <Card key={index} className="p-6 border-l-4 border-l-primary">
-                <h4 className="font-bold text-lg mb-2">{edu.degree}</h4>
-                <p className="text-primary font-medium mb-1">{edu.school}</p>
-                <p className="text-sm text-muted-foreground mb-2">
-                  {edu.location} • {edu.period}
-                </p>
-                <p className="text-sm font-medium">GPA: {edu.gpa}</p>
-              </Card>
-            ))}
-          </div>
-        </motion.div>
+        <div className="grid md:grid-cols-2 gap-8">
+          <Card className="bg-blue-900/20 border-blue-700 backdrop-blur">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold flex items-center gap-2 text-blue-400 mb-4">
+                <GraduationCap /> Education
+              </h3>
+              {education.map((edu, i) => (
+                <div key={i} className="mb-4 last:mb-0">
+                  <h4 className="font-semibold text-white">{edu.degree}</h4>
+                  <p className="text-sm text-gray-300">{edu.school} • {edu.location}</p>
+                  <p className="text-xs text-blue-400">{edu.period} • GPA: {edu.gpa}</p>
+                </div>
+              ))}
+            </Card>
+          </Card>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <Users className="w-6 h-6 text-primary" />
-            Volunteer Experience
-          </h3>
-          <div className="grid md:grid-cols-2 gap-6">
-            {volunteering.map((vol, index) => (
-              <Card key={index} className="p-6 border-l-4 border-l-accent">
-                <h4 className="font-bold text-lg mb-2">{vol.role}</h4>
-                <p className="text-primary font-medium mb-3">{vol.organization}</p>
-                <p className="text-sm text-muted-foreground">{vol.description}</p>
-              </Card>
-            ))}
-          </div>
-        </motion.div>
+          <Card className="bg-red-900/20 border-red-700 backdrop-blur">
+            <Card className="p-6">
+              <h3 className="text-xl font-bold flex items-center gap-2 text-red-400 mb-4">
+                <Award /> Volunteering
+              </h3>
+              {volunteering.map((vol, i) => (
+                <div key={i} className="mb-4 last:mb-0">
+                  <h4 className="font-semibold text-white">{vol.role}</h4>
+                  <p className="text-sm text-gray-300">{vol.org}</p>
+                  <p className="text-xs text-gray-400">{vol.desc}</p>
+                </div>
+              ))}
+            </Card>
+          </Card>
+        </div>
       </div>
     </section>
   );
