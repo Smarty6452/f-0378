@@ -34,7 +34,7 @@ const AboutSection = () => {
 
         <div className="grid md:grid-cols-2 gap-8">
           <Card className="bg-blue-900/20 border-blue-700 backdrop-blur">
-            <Card className="p-6">
+            <Card className="p-6 bg-blue">
               <h3 className="text-xl font-bold flex items-center gap-2 text-blue-400 mb-4">
                 <GraduationCap /> Education
               </h3>
@@ -49,7 +49,7 @@ const AboutSection = () => {
           </Card>
 
           <Card className="bg-red-900/20 border-red-700 backdrop-blur">
-            <Card className="p-6">
+            <Card className="p-6 bg-red">
               <h3 className="text-xl font-bold flex items-center gap-2 text-red-400 mb-4">
                 <Award /> Volunteering
               </h3>
