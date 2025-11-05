@@ -1,237 +1,158 @@
-import { useState, useEffect } from "react";
+// components/sections/JourneySection.tsx
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Clock, Calendar, Briefcase, ArrowRight } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Briefcase, Calendar, MapPin } from "lucide-react";
 
-interface JourneyPathProps {
-  onComplete: () => void;
-}
-
-// Define the career timeline data
-interface TimelineItem {
-  id: string;
-  title: string;
-  company: string;
-  period: string;
-  description: string;
-  skills: string[];
-  unlocked: boolean;
-}
-
-const JourneyPath = ({ onComplete }: JourneyPathProps) => {
-  const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([
+const JourneySection = () => {
+  const experiences = [
     {
-      id: "job-1",
-      title: "Junior Frontend Developer",
-      company: "Unmetered Technologies",
-      period: "Apr 2024 - Aug 2024",
-      description: "Improved Revcatalyst hotel PMS with custom UI components, boosting user engagement by 20%. Replaced third-party libraries with tailored solutions, including custom Toastify notifications and dynamic tables.",
-      skills: ["React.js", "Tailwind", "API Integration", "Performance Optimization"],
-      unlocked: true,
-    },
-    {
-      id: "job-2",
-      title: "Frontend Developer Intern",
-      company: "Gauge.ro",
-      period: "Mar 2023 - Jul 2023",
-      description: "Designed and developed interactive user-friendly interfaces using ReactJS and Tailwind. Implemented SEO strategies and performance enhancements, boosting website traffic and rankings.",
-      skills: ["ReactJS", "Tailwind", "SEO", "API Integration", "LMS Development"],
-      unlocked: false,
-    },
-    {
-      id: "job-3",
-      title: "ReactJS Intern",
-      company: "Cloud4Code",
-      period: "Jun 2022 - Dec 2022",
-      description: "Developed dynamic pages using Ant Design for a car rental project (SkyCar). Utilized Trello and Slack for efficient task management. Contributed to a chatbot project, enhancing UI components.",
-      skills: ["ReactJS", "Ant Design", "Project Management", "Chatbot Development"],
-      unlocked: false,
-    },
-    {
-      id: "job-4",
       title: "Security Guard",
       company: "Allied Universal",
-      period: "Feb 2025 - Present",
-      description: "Currently working as a security guard while pursuing education. Developing strong communication and problem-solving skills.",
-      skills: ["Problem Solving", "Communication", "Security", "Customer Service"],
-      unlocked: false,
+      location: "Kitchener, ON",
+      period: "Feb 2025 – Present",
+      desc: "Full-time role while completing postgraduate studies. Strengthened communication, crisis management, and attention to detail.",
+      skills: ["Problem Solving", "Communication", "Customer Service", "Security"],
+      current: true,
     },
-  ]);
-
-  const [progress, setProgress] = useState(0);
-  const [allUnlocked, setAllUnlocked] = useState(false);
-
-  // Check if all items are unlocked
-  useEffect(() => {
-    const unlocked = timelineItems.every(item => item.unlocked);
-    setAllUnlocked(unlocked);
-    
-    // Calculate progress
-    const unlockCount = timelineItems.filter(item => item.unlocked).length;
-    setProgress((unlockCount / timelineItems.length) * 100);
-  }, [timelineItems]);
-
-  // Handle unlocking a timeline item
-  const unlockItem = (id: string) => {
-    setTimelineItems(prev => 
-      prev.map(item => {
-        // Find the current unlocked item index
-        const currentUnlockedIndex = prev.findIndex(i => i.id === id);
-        
-        // Only allow unlocking the next item in sequence
-        if (item.id === id) {
-          return { ...item, unlocked: true };
-        }
-        
-        // If the next item exists and current item is unlocked, unlock the next item
-        const nextIndex = currentUnlockedIndex + 1;
-        if (nextIndex < prev.length && item.id === prev[nextIndex].id && prev[currentUnlockedIndex].unlocked) {
-          return { ...item, unlocked: true };
-        }
-        
-        return item;
-      })
-    );
-  };
+    {
+      title: "Junior Frontend Developer",
+      company: "Unmetered Technologies",
+      location: "Remote",
+      period: "Apr 2024 – Aug 2024",
+      desc: "Revamped hotel PMS (Revcatalyst) with custom React components. Replaced 3rd-party UI libs → 20% faster load, 15% better UX.",
+      skills: ["React", "Tailwind", "API", "Performance"],
+    },
+    {
+      title: "Frontend Developer Intern",
+      company: "Gauge.ro",
+      location: "Remote",
+      period: "Mar 2023 – Jul 2023",
+      desc: "Built responsive dashboards with React + Tailwind. Applied SEO & Lighthouse fixes → +40% organic traffic.",
+      skills: ["React", "Tailwind", "SEO", "LMS"],
+    },
+    {
+      title: "ReactJS Intern",
+      company: "Cloud4Code",
+      location: "Pune, India",
+      period: "Jun 2022 – Dec 2022",
+      desc: "Developed SkyCar rental app UI using Ant Design. Integrated real-time chat widget.",
+      skills: ["React", "Ant Design", "Chatbot", "Trello"],
+    },
+  ];
 
   return (
-    <div className="min-h-[80vh] py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-10"
-      >
-        <h2 className="text-3xl md:text-4xl font-bold mb-2 text-yellow-400">My Journey</h2>
-        <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-          Explore the key milestones in my professional development and education.
-        </p>
-        
-        {/* Skip option button */}
-        {/* <Button 
-          variant="ghost" 
-          onClick={onComplete}
-          className="mt-4 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/20"
-        >
-          Skip this section →
-        </Button> */}
-      </motion.div>
+    <section id="journey" className="py-20 px-4 bg-black/95 overflow-hidden">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-900/5 via-transparent to-red-900/5 pointer-events-none" />
 
-      {/* Progress bar */}
-      <div className="w-full bg-gray-700 h-2 rounded-full mb-10 max-w-4xl mx-auto">
-        <motion.div 
-          className="bg-gradient-to-r from-red-500 to-yellow-500 h-full rounded-full"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.5 }}
-        />
-      </div>
-
-      {/* Journey path - Timeline view */}
-      <div className="relative max-w-4xl mx-auto">
-        {/* Timeline line */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-red-500/30" />
-
-        {/* Timeline items */}
-        {timelineItems.map((item, index) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-            className={`relative mb-16 ${index % 2 === 0 ? "pr-8 md:text-right md:ml-auto md:mr-[50%]" : "pl-8 md:ml-[50%]"}`}
-          >
-            {/* Timeline dot */}
-            <div 
-              className={`absolute left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full border-4 z-10 
-                ${item.unlocked ? "bg-yellow-500 border-red-500" : "bg-gray-700 border-gray-600"}`}
-            />
-
-            <Card 
-              className={`w-full md:w-[90%] transition-all duration-300 
-                ${item.unlocked ? "bg-black/40 border-red-500/50" : "bg-black/20 border-gray-700 filter grayscale"}`}
-            >
-              <CardHeader>
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div>
-                    <CardTitle className={item.unlocked ? "text-white" : "text-gray-400"}>
-                      {item.title}
-                    </CardTitle>
-                    <CardDescription className="flex items-center mt-1">
-                      <Briefcase className="w-4 h-4 mr-1" /> 
-                      {item.company}
-                    </CardDescription>
-                  </div>
-                  <Badge className={`${item.unlocked ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-700"}`}>
-                    <Calendar className="w-3 h-3 mr-1" /> 
-                    {item.period}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className={`text-sm ${item.unlocked ? "text-gray-300" : "text-gray-500"}`}>
-                  {item.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {item.skills.map(skill => (
-                    <Badge 
-                      key={skill} 
-                      variant="secondary"
-                      className={item.unlocked ? "bg-red-900/30 text-red-200" : "bg-gray-800 text-gray-400"}
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-              <CardFooter>
-                {!item.unlocked && index > 0 && timelineItems[index - 1].unlocked && (
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => unlockItem(item.id)}
-                    className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
-                  >
-                    Unlock <ArrowRight className="ml-1 w-4 h-4" />
-                  </Button>
-                )}
-                {item.unlocked && index === 0 && !timelineItems[1].unlocked && (
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => unlockItem(timelineItems[1].id)}
-                    className="border-yellow-500 text-yellow-500 hover:bg-yellow-500/10"
-                  >
-                    Continue Journey <ArrowRight className="ml-1 w-4 h-4" />
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Complete section button */}
-      {allUnlocked && (
-        <motion.div 
-          className="text-center mt-10"
+      <div className="container mx-auto max-w-5xl relative z-10">
+        {/* Header */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
         >
-          <Button 
-            size="lg" 
-            onClick={onComplete}
-            className="bg-red-600 hover:bg-red-700 text-white"
-          >
-            Complete Journey & Unlock Skills <ArrowRight className="ml-2" />
-          </Button>
+          <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-red-400">
+            My Journey
+          </h2>
+          <p className="mt-4 text-gray-300 max-w-2xl mx-auto">
+            From intern to full-stack developer — every step shaped who I am today.
+          </p>
         </motion.div>
-      )}
-    </div>
+
+        {/* Timeline Cards */}
+        <div className="space-y-8">
+          {experiences.map((exp, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className={`relative ${i % 2 === 0 ? "pr-0 md:pr-8" : "pl-0 md:pl-8"}`}
+            >
+              {/* Connector line */}
+              {i !== experiences.length - 1 && (
+                <div className="absolute left-8 top-16 w-0.5 h-24 bg-gradient-to-b from-blue-500/30 to-red-500/30 hidden md:block" />
+              )}
+
+              {/* Card */}
+              <Card
+                className={`
+                  group relative overflow-hidden
+                  ${exp.current 
+                    ? "bg-gradient-to-br from-blue-900/40 to-red-900/40 border-blue-500/70 shadow-2xl shadow-blue-500/20" 
+                    : "bg-gradient-to-br from-gray-900/50 to-black border-gray-700/50"
+                  }
+                  backdrop-blur-sm p-1 transition-all hover:scale-[1.02] hover:shadow-xl
+                `}
+              >
+                <div className="bg-black/70 rounded-xl p-6 h-full">
+                  {/* Header */}
+                  <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                        <Briefcase className="w-5 h-5 text-blue-400" />
+                        {exp.title}
+                        {exp.current && (
+                          <span className="ml-2 text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">
+                            Current
+                          </span>
+                        )}
+                      </h3>
+                      <p className="text-sm text-gray-300 mt-1">
+                        {exp.company} • {exp.location}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400 text-sm">
+                      <Calendar className="w-4 h-4" />
+                      {exp.period}
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                    {exp.desc}
+                  </p>
+
+                  {/* Skills */}
+                  <div className="flex flex-wrap gap-2">
+                    {exp.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className={`
+                          px-3 py-1 text-xs rounded-full transition-all
+                          ${exp.current 
+                            ? "bg-gradient-to-r from-blue-600/30 to-red-600/30 text-blue-200 border border-blue-500/50" 
+                            : "bg-gray-800/50 text-gray-400 border border-gray-600"
+                          }
+                        `}
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Final CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <p className="text-gray-400 text-sm">
+            Ready to write the next chapter together?
+          </p>
+        </motion.div>
+      </div>
+    </section>
   );
 };
 
-export default JourneyPath;
+export default JourneySection;

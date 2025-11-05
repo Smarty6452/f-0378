@@ -95,9 +95,9 @@ export default function ProjectsShowcase({ onComplete }: { onComplete: () => voi
         >
           <h2 className="text-4xl font-bold text-blue-400 mb-2">Projects</h2>
           <p className="text-gray-400">Click a card to see details</p>
-          <Button variant="ghost" onClick={onComplete} className="mt-4 text-yellow-400">
+          {/* <Button variant="ghost" onClick={onComplete} className="mt-4 text-yellow-400">
             Skip
-          </Button>
+          </Button> */}
         </motion.div>
 
         {/* Featured – 2 cards, perfectly centered */}
