@@ -110,13 +110,13 @@ const JourneyPath = ({ onComplete }: JourneyPathProps) => {
         </p>
         
         {/* Skip option button */}
-        <Button 
+        {/* <Button 
           variant="ghost" 
           onClick={onComplete}
           className="mt-4 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/20"
         >
           Skip this section →
-        </Button>
+        </Button> */}
       </motion.div>
 
       {/* Progress bar */}
