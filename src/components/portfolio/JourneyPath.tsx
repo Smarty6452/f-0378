@@ -1,68 +1,61 @@
-// components/sections/JourneySection.tsx
 import { motion } from "framer-motion";
-import { Card } from "@/components/ui/card";
-import { Briefcase, Calendar, MapPin } from "lucide-react";
+import { Briefcase, Calendar } from "lucide-react";
 
-const JourneySection = () => {
-  const experiences = [
-    {
-      title: "Security Guard",
-      company: "Allied Universal",
-      location: "Kitchener, ON",
-      period: "Feb 2025 – Present",
-      desc: "Full-time role while completing postgraduate studies. Strengthened communication, crisis management, and attention to detail.",
-      skills: ["Problem Solving", "Communication", "Customer Service", "Security"],
-      current: true,
-    },
-    {
-      title: "Junior Frontend Developer",
-      company: "Unmetered Technologies",
-      location: "Remote",
-      period: "Apr 2024 – Aug 2024",
-      desc: "Revamped hotel PMS (Revcatalyst) with custom React components. Replaced 3rd-party UI libs → 20% faster load, 15% better UX.",
-      skills: ["React", "Tailwind", "API", "Performance"],
-    },
-    {
-      title: "Frontend Developer Intern",
-      company: "Gauge.ro",
-      location: "Remote",
-      period: "Mar 2023 – Jul 2023",
-      desc: "Built responsive dashboards with React + Tailwind. Applied SEO & Lighthouse fixes → +40% organic traffic.",
-      skills: ["React", "Tailwind", "SEO", "LMS"],
-    },
-    {
-      title: "ReactJS Intern",
-      company: "Cloud4Code",
-      location: "Pune, India",
-      period: "Jun 2022 – Dec 2022",
-      desc: "Developed SkyCar rental app UI using Ant Design. Integrated real-time chat widget.",
-      skills: ["React", "Ant Design", "Chatbot", "Trello"],
-    },
-  ];
+const experiences = [
+  {
+    title: "Junior Frontend Developer",
+    company: "Unmetered Technologies",
+    location: "Remote, India",
+    period: "Apr 2024 – Aug 2024",
+    points: [
+      "Enhanced Revcatalyst PMS UI with HTML, CSS, and JavaScript — 20% engagement boost",
+      "Replaced third-party libraries with custom solutions (e.g., Toastify notifications)",
+      "Integrated APIs with backend teams ensuring seamless functionality",
+    ],
+    current: true,
+  },
+  {
+    title: "Frontend Developer Intern",
+    company: "Gauge.ro",
+    location: "Bengaluru, India",
+    period: "Mar 2023 – Jul 2023",
+    points: [
+      "Built interactive React + Tailwind interfaces for LMS and hotel chain",
+      "Fixed technical issues improving performance and usability",
+      "Contributed to documentation and CMS updates with SQL integrations",
+    ],
+  },
+  {
+    title: "ReactJS Intern",
+    company: "Cloud4Code",
+    location: "Surat, India",
+    period: "Jun 2022 – Dec 2022",
+    points: [
+      "Built dynamic pages for SkyCar using Ant Design and JavaScript",
+      "Worked in Agile environment using Trello for team collaboration",
+      "Enhanced chatbot UI and integrated payment gateways",
+    ],
+  },
+];
 
+const JourneyPath = () => {
   return (
-    <section id="journey" className="py-20 px-4 bg-black/95 overflow-hidden">
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-900/5 via-transparent to-red-900/5 pointer-events-none" />
-
-      <div className="container mx-auto max-w-5xl relative z-10">
-        {/* Header */}
+    <section className="py-20 px-4 bg-muted/30">
+      <div className="container mx-auto max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-red-400">
-            My Journey
-          </h2>
-          <p className="mt-4 text-gray-300 max-w-2xl mx-auto">
-            From intern to full-stack developer — every step shaped who I am today.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Experience</h2>
+          <p className="text-muted-foreground">My professional journey in software development.</p>
         </motion.div>
 
-        {/* Timeline Cards */}
-        <div className="space-y-8">
+        <div className="relative">
+          {/* Timeline line */}
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-px" />
+
           {experiences.map((exp, i) => (
             <motion.div
               key={i}
@@ -70,89 +63,48 @@ const JourneySection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className={`relative ${i % 2 === 0 ? "pr-0 md:pr-8" : "pl-0 md:pl-8"}`}
+              className={`relative mb-10 pl-12 md:pl-0 md:w-1/2 ${
+                i % 2 === 0 ? "md:pr-12 md:ml-0" : "md:pl-12 md:ml-auto"
+              }`}
             >
-              {/* Connector line */}
-              {i !== experiences.length - 1 && (
-                <div className="absolute left-8 top-16 w-0.5 h-24 bg-gradient-to-b from-blue-500/30 to-red-500/30 hidden md:block" />
-              )}
+              {/* Dot */}
+              <div className={`absolute top-2 w-3 h-3 rounded-full border-2 border-primary bg-background left-3 md:left-auto ${
+                i % 2 === 0 ? "md:-right-1.5" : "md:-left-1.5"
+              }`} />
 
-              {/* Card */}
-              <Card
-                className={`
-                  group relative overflow-hidden
-                  ${exp.current 
-                    ? "bg-gradient-to-br from-blue-900/40 to-red-900/40 border-blue-500/70 shadow-2xl shadow-blue-500/20" 
-                    : "bg-gradient-to-br from-gray-900/50 to-black border-gray-700/50"
-                  }
-                  backdrop-blur-sm p-1 transition-all hover:scale-[1.02] hover:shadow-xl
-                `}
-              >
-                <div className="bg-black/70 rounded-xl p-6 h-full">
-                  {/* Header */}
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                    <div>
-                      <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Briefcase className="w-5 h-5 text-blue-400" />
-                        {exp.title}
-                        {exp.current && (
-                          <span className="ml-2 text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">
-                            Current
-                          </span>
-                        )}
-                      </h3>
-                      <p className="text-sm text-gray-300 mt-1">
-                        {exp.company} • {exp.location}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-400 text-sm">
-                      <Calendar className="w-4 h-4" />
-                      {exp.period}
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                    {exp.desc}
-                  </p>
-
-                  {/* Skills */}
-                  <div className="flex flex-wrap gap-2">
-                    {exp.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className={`
-                          px-3 py-1 text-xs rounded-full transition-all
-                          ${exp.current 
-                            ? "bg-gradient-to-r from-blue-600/30 to-red-600/30 text-blue-200 border border-blue-500/50" 
-                            : "bg-gray-800/50 text-gray-400 border border-gray-600"
-                          }
-                        `}
-                      >
-                        {skill}
-                      </span>
-                    ))}
+              <div className={`p-5 rounded-xl border bg-card shadow-sm hover:shadow-md transition-shadow ${
+                exp.current ? "border-primary/40" : "border-border"
+              }`}>
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div>
+                    <h3 className="font-semibold text-foreground flex items-center gap-2">
+                      <Briefcase className="w-4 h-4 text-primary" />
+                      {exp.title}
+                      {exp.current && (
+                        <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">Latest</span>
+                      )}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">{exp.company} · {exp.location}</p>
                   </div>
                 </div>
-              </Card>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground mb-3">
+                  <Calendar className="w-3 h-3" /> {exp.period}
+                </div>
+                <ul className="space-y-1.5">
+                  {exp.points.map((point, j) => (
+                    <li key={j} className="text-sm text-muted-foreground flex items-start gap-2">
+                      <span className="w-1 h-1 rounded-full bg-primary mt-2 flex-shrink-0" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </motion.div>
           ))}
         </div>
-
-        {/* Final CTA */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
-          <p className="text-gray-400 text-sm">
-            Ready to write the next chapter together?
-          </p>
-        </motion.div>
       </div>
     </section>
   );
 };
 
-export default JourneySection;
+export default JourneyPath;
