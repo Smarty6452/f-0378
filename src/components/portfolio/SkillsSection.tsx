@@ -1,78 +1,61 @@
-"use client";
-
 import { motion } from "framer-motion";
 
-const core = [
-  { name: "React.js", level: 90 },
-  { name: "Next.js", level: 85 },
-  { name: "TypeScript", level: 85 },
-  { name: "Node.js", level: 80 },
-  { name: "MongoDB", level: 75 },
+const skillCategories = [
+  {
+    title: "Frontend",
+    skills: ["React.js", "Next.js", "TypeScript", "JavaScript (ES6+)", "HTML5", "CSS3", "Tailwind CSS", "Ant Design"],
+  },
+  {
+    title: "Backend",
+    skills: ["Node.js", "Express.js", "RESTful APIs", "MongoDB", "SQL", "Python", "ASP.NET"],
+  },
+  {
+    title: "Tools & DevOps",
+    skills: ["Git", "GitHub", "Docker", "Nginx", "Figma", "Azure DevOps", "Render", "VPS Deployment"],
+  },
+  {
+    title: "AI & Other",
+    skills: ["Groq LLaMA 3", "Socket.IO", "Stripe API", "JWT Auth", "SEO", "Agile/Scrum", "CMS"],
+  },
 ];
-
-const additional = [
-  { name: "Tailwind CSS", level: 88 },
-  { name: "Git / GitHub", level: 85 },
-  { name: "Figma", level: 75 },
-  { name: "Python", level: 70 },
-];
-
-const SkillBar = ({ name, level }: { name: string; level: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
-    className="group"
-  >
-    <div className="flex justify-between mb-1">
-      <span className="font-medium text-white group-hover:text-blue-400 transition-colors">
-        {name}
-      </span>
-      <span className="text-blue-400">{level}%</span>
-    </div>
-
-    <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-      <motion.div
-        initial={{ width: 0 }}
-        whileInView={{ width: `${level}%` }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full"
-      />
-    </div>
-  </motion.div>
-);
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="py-20 bg-black/30">
-      <div className="container mx-auto max-w-5xl px-4">
-        {/* Header */}
+    <section className="py-20 px-4">
+      <div className="container mx-auto max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          viewport={{ once: true }}
+          className="text-center mb-14"
         >
-          <h2 className="text-4xl font-bold text-blue-400 mb-2">Skills</h2>
-          <p className="text-gray-400">Core technologies I work with every day.</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Skills</h2>
+          <p className="text-muted-foreground">Technologies I work with daily.</p>
         </motion.div>
 
-        {/* Two-column layout */}
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Core */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-white mb-4">Core Skills</h3>
-            {core.map((s) => (
-              <SkillBar key={s.name} {...s} />
-            ))}
-          </div>
-
-          {/* Additional */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-white mb-4">Additional Skills</h3>
-            {additional.map((s) => (
-              <SkillBar key={s.name} {...s} />
-            ))}
-          </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {skillCategories.map((cat, i) => (
+            <motion.div
+              key={cat.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="p-5 rounded-xl border border-border bg-card hover:shadow-md transition-shadow"
+            >
+              <h3 className="font-semibold text-primary mb-4 text-sm uppercase tracking-wider">{cat.title}</h3>
+              <div className="flex flex-wrap gap-2">
+                {cat.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="px-2.5 py-1 text-xs rounded-md bg-muted text-muted-foreground font-medium hover:bg-primary/10 hover:text-primary transition-colors cursor-default"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
